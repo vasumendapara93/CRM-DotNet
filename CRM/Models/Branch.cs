@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +15,14 @@ namespace CRM.Models
         public string BranchName { get; set; }
 
         [Required]
-        public string BranchCode {get; set;} 
+        public string BranchCode {get; set;}
+
+        [Required]
+        public string OrganizationId { get; set;}
+
+        [ForeignKey("OrganizationId")]
+        [ValidateNever]
+        public User User { get; set; }
         
     }
 }

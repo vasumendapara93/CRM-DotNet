@@ -81,7 +81,6 @@ namespace CRM.Repository
             user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, BCrypt.Net.HashType.SHA256);
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
-            user.Password = "";
             return user;
         }
     }

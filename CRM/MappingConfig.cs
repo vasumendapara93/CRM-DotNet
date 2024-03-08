@@ -10,6 +10,8 @@ namespace CRM
         public MappingConfig()
         {
             CreateMap<User, RegisterationRequestDTO>().ReverseMap();
+
+            CreateMap<Branch, BranchCreateDTO>().ReverseMap();
         }
     }
 }

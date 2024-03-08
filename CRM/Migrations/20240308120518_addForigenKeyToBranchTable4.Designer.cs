@@ -4,6 +4,7 @@ using CRM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308120518_addForigenKeyToBranchTable4")]
+    partial class addForigenKeyToBranchTable4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,13 +38,13 @@ namespace CRM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrganizationId")
+                    b.Property<string>("OrganizationIdFK")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("OrganizationIdFK");
 
                     b.ToTable("Branches");
                 });
@@ -122,7 +125,7 @@ namespace CRM.Migrations
                 {
                     b.HasOne("CRM.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
+                        .HasForeignKey("OrganizationIdFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

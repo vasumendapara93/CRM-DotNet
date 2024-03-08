@@ -9,20 +9,25 @@ using System.Net;
 
 namespace CRM.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepo;
+        private readonly IBranchRepository _branchRepo;
         private APIResponse _response;
         private IEnumerable<Role> _roles;
         private readonly IRoleRepository _roleRepo;
+        private readonly ApplicationDbContext _db;
 
-        public UsersController(IUserRepository userRepo)
+        public UsersController(IUserRepository userRepo, IBranchRepository branchRepo, IRoleRepository roleRepo, ApplicationDbContext db)
         {
             _userRepo = userRepo;
             _response = new APIResponse();
+            _roleRepo = roleRepo;
             _roles = _roleRepo.GetAllAsync().GetAwaiter().GetResult();
+           _db = db;
+            _branchRepo = branchRepo;
         }
 
         [HttpPost("login")]
@@ -54,6 +59,8 @@ namespace CRM.Controllers
         [HttpPost("registerorganization")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> RegisterOrganization(RegisterationRequestDTO registerationRequestDTO)
         {
             bool isUniqueEmail = await _userRepo.IsUniqueUser(registerationRequestDTO.Email);
@@ -65,6 +72,8 @@ namespace CRM.Controllers
                 return BadRequest(_response);
             }
 
+            registerationRequestDTO.BranchId = null;
+            registerationRequestDTO.OrganizationId = null;
             registerationRequestDTO.RoleId = _roles.FirstOrDefault(u => u.RoleName == "Organization").Id;
 
             User user = await _userRepo.Register(registerationRequestDTO);
@@ -75,6 +84,19 @@ namespace CRM.Controllers
                 _response.ErrorMessages.Add("Some Error While Registering");
                 return BadRequest(_response);
             }
+
+            Branch branch = new Branch
+            {
+                BranchName = "Default Branch",
+                BranchCode = "01",
+                OrganizationId = ""
+            };
+
+            user.BranchId = branch.Id;
+            user.OrganizationId = user.Id;
+            branch.OrganizationId = user.Id;
+            await _branchRepo.CreateAsync(branch);
+           
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
         }

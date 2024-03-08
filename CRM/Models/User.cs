@@ -39,11 +39,7 @@ namespace CRM.Models
 
         public bool IsActive { get; set; } = true;
 
-        public string? OrganizationId { get; set; }
-
-        [ForeignKey("OrganizationId")]
-        [ValidateNever]
-        public User Organization { get; set; }
+        public string? OrganizationId { get; set; } 
 
         public string? BranchId { get; set; }
 

@@ -11,9 +11,9 @@ namespace CRM.Models.DTOs
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string RoleId { get; set; }
+        public string? RoleId { get; set; }
         public string OrganizationId { get; set; }
-        public string BranchId { get; set; }
+        public string? BranchId { get; set; }
         public DateTime? SubscriptionStartDate { get; set; }
         public DateTime? SubscriptionEndDate { get; set; }
     }

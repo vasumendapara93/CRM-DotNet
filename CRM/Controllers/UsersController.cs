@@ -99,7 +99,60 @@ namespace CRM.Controllers
             return Ok(_response);
         }
 
+        [Authorize(Roles = "Master User, Organization")]
+        [HttpPost("organization/update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> UpdateOrganization(User user)
+        {bool isUniqueEmail = await _userRepo.IsUniqueUser(user.Email);
+            if (!isUniqueEmail)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("Email Already Registered");
+                return BadRequest(_response);
+            }
 
+
+            User userFormDB = await _userRepo.GetAsync(u=>u.Id == user.Id, Trecked: false);
+            if (userFormDB == null)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("User Not Exists");
+                return BadRequest(_response);
+            }
+
+            user.Password = userFormDB.Password;
+            await _userRepo.Update(user);
+           
+            _response.StatusCode = HttpStatusCode.OK;
+            return Ok(_response);
+        }
+
+        [Authorize(Roles = "Master User, Organization")]
+        [HttpPost("organization/Remove")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> RomoveOrganization(User user)
+        {
+            User userFormDB = await _userRepo.GetAsync(u => u.Id == user.Id, Trecked: false);
+            if (userFormDB == null)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("User Not Exists");
+                return BadRequest(_response);
+            }
+            await _userRepo.RemoveAsync(user);
+
+            _response.StatusCode = HttpStatusCode.OK;
+            return Ok(_response);
+        }
 
         [Authorize(Roles = "Organization")]
         [HttpPost("employee/create")]

@@ -10,12 +10,12 @@ using System.Text;
 
 namespace CRM.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
         string secret;
-        public UserRepository(ApplicationDbContext db, IMapper mapper, IConfiguration configuration)
+        public UserRepository(ApplicationDbContext db, IMapper mapper, IConfiguration configuration) : base(db)
         {
 
             _db = db;
@@ -82,6 +82,12 @@ namespace CRM.Repository
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
             return user;
+        }
+
+        public async Task Update(User user)
+        {
+           _db.Users.Update(user);
+            await _db.SaveChangesAsync();
         }
     }
 }

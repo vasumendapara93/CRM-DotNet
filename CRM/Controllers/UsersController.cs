@@ -49,7 +49,7 @@ namespace CRM.Controllers
                 return BadRequest(_response);
             }
             _response.StatusCode = HttpStatusCode.OK;
-            _response.Result = loginResponseDTO;
+            _response.Data = loginResponseDTO;
             return Ok(_response);
         }
 

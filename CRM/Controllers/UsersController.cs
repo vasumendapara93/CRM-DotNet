@@ -132,7 +132,7 @@ namespace CRM.Controllers
             return Ok(_response);
         }
 
-        [Authorize(Roles = "Master User, Organization")]
+        [Authorize(Roles = "Master User")]
         [HttpPost("organization/Remove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -179,6 +179,62 @@ namespace CRM.Controllers
                 _response.ErrorMessages.Add("Some Error While Registering");
                 return BadRequest(_response);
             }
+
+            _response.StatusCode = HttpStatusCode.OK;
+            return Ok(_response);
+        }
+
+        [Authorize(Roles = "Organization, Data Entry Operator, Assiner, Sells Person")]
+        [HttpPost("employee/update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> UpdateEmployee(User user)
+        {
+            bool isUniqueEmail = await _userRepo.IsUniqueUser(user.Email);
+            if (!isUniqueEmail)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("Email Already Registered");
+                return BadRequest(_response);
+            }
+
+            User userFormDB = await _userRepo.GetAsync(u => u.Id == user.Id, Trecked: false);
+            if (userFormDB == null)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("User Not Exists");
+                return BadRequest(_response);
+            }
+
+            user.Password = userFormDB.Password;
+            await _userRepo.Update(user);
+
+            _response.StatusCode = HttpStatusCode.OK;
+            return Ok(_response);
+        }
+
+
+        [Authorize(Roles = "Organization")]
+        [HttpPost("employee/remove")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> RemoveEmployee(User user)
+        {
+            User userFormDB = await _userRepo.GetAsync(u => u.Id == user.Id, Trecked: false);
+            if (userFormDB == null)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("User Not Exists");
+                return BadRequest(_response);
+            }
+            await _userRepo.RemoveAsync(user);
 
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);

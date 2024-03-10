@@ -25,33 +25,33 @@ namespace CRM.DbInitialize
             }
 
             //Create role and master user of not exist
+            Role defaultRole = new Role
+            {
+                RoleName = "Master User"
+            };
             if (_db.Roles.Count() == 0) {
-
-                Role defaultRole = new Role
-                {
-                    RoleName = "Master User"
-                };
 
                 _db.Roles.Add(defaultRole);
                 _db.Roles.Add(new Role { RoleName = "Organization" });
                 _db.Roles.Add(new Role { RoleName = "Data Entry Operator" });
                 _db.Roles.Add(new Role { RoleName = "Assiner" });
                 _db.Roles.Add(new Role { RoleName = "Sells Person" });
-
-                if (_db.Users.Count() == 0)
-                {
-                    _db.Users.Add(new User { 
-
-                        Name = "Master User",
-                        Email = "masteruser@gmail.com",
-                        PhoneNumber = "1234567890",
-                        Password = BCrypt.Net.BCrypt.EnhancedHashPassword("Master User", BCrypt.Net.HashType.SHA256),
-                        RoleId = defaultRole.Id,
-                    });
-                }
-
-                _db.SaveChanges();
+                
             }
+
+            if (_db.Users.Count() == 0)
+            {
+                _db.Users.Add(new User
+                {
+
+                    Name = "Master User",
+                    Email = "masteruser@gmail.com",
+                    PhoneNumber = "1234567890",
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword("Master User", BCrypt.Net.HashType.SHA256),
+                    RoleId = defaultRole.Id,
+                });
+            }
+            _db.SaveChanges();
 
         }
     }

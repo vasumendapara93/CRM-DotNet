@@ -31,22 +31,30 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Create(BranchCreateDTO branchCreateDTO)
+        public async Task<ActionResult<APIResponse>> Create(BranchCreateDTO branchCreateDTO)
         {
-            bool isUniqueBranch = await _branchRepo.IsUniqueBranch(branchCreateDTO);
-            if (!isUniqueBranch)
+            try
             {
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Branch Already Exists");
-                return BadRequest(_response);
+                bool isUniqueBranch = await _branchRepo.IsUniqueBranch(branchCreateDTO);
+                if (!isUniqueBranch)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Branch Already Exists");
+                    return BadRequest(_response);
+                }
+
+                Branch branch = _mapper.Map<Branch>(branchCreateDTO);
+                await _branchRepo.CreateAsync(branch);
+
+                _response.StatusCode = HttpStatusCode.OK;
             }
-
-            Branch branch = _mapper.Map<Branch>(branchCreateDTO);
-            await _branchRepo.CreateAsync(branch);
-
-            _response.StatusCode = HttpStatusCode.OK;
-            return Ok(_response);
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
         }
 
     }

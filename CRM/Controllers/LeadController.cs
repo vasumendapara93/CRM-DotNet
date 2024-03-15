@@ -30,7 +30,7 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<APIResponse>> GetAll()
         {
             try
             {
@@ -43,7 +43,7 @@ namespace CRM.Controllers
                 _response.ErrorMessages.Add(e.Message);
                 _response.IsSuccess = false;
             }
-            return Ok(_response);
+            return _response;
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator")]
@@ -52,7 +52,7 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Create([FromBody] LeadCreateDTO leadCreateDTO)
+        public async Task<ActionResult<APIResponse>> Create([FromBody] LeadCreateDTO leadCreateDTO)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace CRM.Controllers
                 _response.ErrorMessages.Add(e.Message);
                 _response.IsSuccess = false;
             }
-            return Ok(_response);
+            return _response;
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator, Assigner, SellsPerson")]
@@ -75,7 +75,7 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(string id, [FromBody]LeadUpdateDTO leadUpdateDTO)
+        public async Task<ActionResult<APIResponse>> Update(string id, [FromBody]LeadUpdateDTO leadUpdateDTO)
         {
                 try
                 {
@@ -100,7 +100,7 @@ namespace CRM.Controllers
                     _response.ErrorMessages.Add(e.Message);
                     _response.IsSuccess = false;
                 }
-            return Ok(_response);
+            return _response;
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator")]
@@ -110,7 +110,7 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Remove(string id)
+        public async Task<ActionResult<APIResponse>> Remove(string id)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace CRM.Controllers
                 _response.ErrorMessages.Add(e.Message);
                 _response.IsSuccess = false;
             }
-            return Ok(_response);
+            return _response;
         }
     }
 }

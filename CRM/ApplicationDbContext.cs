@@ -10,5 +10,6 @@ namespace CRM
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Branch> Branches { get; set; }
+        public DbSet<Lead> Leads { get; set; }
     }
 }

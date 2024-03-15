@@ -185,7 +185,7 @@ namespace CRM.Controllers
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator, Assiner, Sells Person")]
-        [HttpPost("employee/update")]
+        [HttpPut("employee/update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -219,7 +219,7 @@ namespace CRM.Controllers
 
 
         [Authorize(Roles = "Organization")]
-        [HttpPost("employee/remove")]
+        [HttpDelete("employee/remove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

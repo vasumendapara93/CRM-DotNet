@@ -21,6 +21,7 @@ builder.Services.AddScoped<IDbinitializer, DBInitializer>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:SecretKey");

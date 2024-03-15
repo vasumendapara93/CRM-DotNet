@@ -9,5 +9,7 @@ namespace CRM.Models.DTOs
         public string BranchName { get; set; }
         public string BranchCode { get; set; }
         public string OrganizationId { get; set; }
+
+        public DateTime? UpdateDate;
     }
 }

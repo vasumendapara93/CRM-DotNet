@@ -23,6 +23,9 @@ namespace CRM.Models
         [ForeignKey("OrganizationId")]
         [ValidateNever]
         public User User { get; set; }
-        
+
+        public DateTime CreateDate = DateTime.Now;
+        public DateTime? UpdateDate;
+
     }
 }

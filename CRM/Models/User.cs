@@ -52,6 +52,7 @@ namespace CRM.Models
         public DateTime? SubscriptionEndDate { get; set; }
 
         public DateTime CreateDate = DateTime.Now;
+        public DateTime? UpdateDate;
 
     }
 }

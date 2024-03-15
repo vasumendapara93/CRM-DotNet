@@ -86,6 +86,7 @@ namespace CRM.Repository
 
         public async Task Update(User user)
         {
+            user.UpdateDate = DateTime.UtcNow;
            _db.Users.Update(user);
             await _db.SaveChangesAsync();
         }

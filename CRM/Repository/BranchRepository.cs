@@ -25,6 +25,7 @@ namespace CRM.Repository
 
         public async Task UpdateAsync(Branch entity)
         {
+            entity.UpdateDate = DateTime.Now;   
             _db.Branches.Update(entity);
             await SaveAsync();
         }

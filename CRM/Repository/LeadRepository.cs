@@ -19,6 +19,7 @@ namespace CRM.Repository
         public async Task UpdateAsync(LeadUpdateDTO entity)
         {
             Lead lead = _mapper.Map<Lead>(entity);
+            lead.UpdateDate = DateTime.Now;
             _db.Leads.Update(lead);
             _db.SaveChanges();
         }

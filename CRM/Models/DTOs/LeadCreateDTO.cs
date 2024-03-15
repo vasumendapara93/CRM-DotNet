@@ -41,5 +41,7 @@ namespace CRM.Models.DTOs
         public string? Description { get; set; }
         public string? Notes { get; set; }
 
+        public DateTime? UpdateDate;
+
     }
 }

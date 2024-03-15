@@ -16,5 +16,7 @@ namespace CRM.Models.DTOs
         public string? BranchId { get; set; }
         public DateTime? SubscriptionStartDate { get; set; }
         public DateTime? SubscriptionEndDate { get; set; }
+
+        public DateTime? UpdateDate;
     }
 }

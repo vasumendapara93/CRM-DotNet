@@ -32,8 +32,17 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetAll()
         {
-            IEnumerable<Lead> leads = await _leadRepo.GetAllAsync();
-            _response.Data = leads;
+            try
+            {
+                IEnumerable<Lead> leads = await _leadRepo.GetAllAsync();
+                _response.Data = leads;
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
             return Ok(_response);
         }
 
@@ -45,8 +54,17 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] LeadCreateDTO leadCreateDTO)
         {
-            Lead lead = _mapper.Map<Lead>(leadCreateDTO);
-            await _leadRepo.CreateAsync(lead);
+            try
+            {
+                Lead lead = _mapper.Map<Lead>(leadCreateDTO);
+                await _leadRepo.CreateAsync(lead);
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
             return Ok(_response);
         }
 

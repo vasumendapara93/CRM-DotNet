@@ -36,7 +36,11 @@ namespace CRM.DbInitialize
                 _db.Roles.Add(new Role { RoleName = SD.Role_DataEntryOperator });
                 _db.Roles.Add(new Role { RoleName = SD.Role_Assiner });
                 _db.Roles.Add(new Role { RoleName = SD.Role_SalesPerson });
-                
+
+            }
+            else
+            {
+                defaultRole = _db.Roles.FirstOrDefault(u => u.RoleName == SD.Role_MasterUser);
             }
 
             if (_db.Users.Count() == 0)
@@ -49,6 +53,7 @@ namespace CRM.DbInitialize
                     PhoneNumber = "1234567890",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("Master User", BCrypt.Net.HashType.SHA256),
                     RoleId = defaultRole.Id,
+                    CreateDate = DateTime.Now,
                 });
             }
             _db.SaveChanges();

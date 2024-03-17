@@ -1,4 +1,5 @@
-﻿using CRM.Models;
+﻿using AutoMapper;
+using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +9,11 @@ namespace CRM.Repository
     public class BranchRepository : Repository<Branch>, IBranchRepository
     {
         private readonly ApplicationDbContext _db;
-        public BranchRepository(ApplicationDbContext db) : base(db)
+        private readonly IMapper _mapper;
+        public BranchRepository(ApplicationDbContext db, IMapper mapper) : base(db)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task<bool> IsUniqueBranch(BranchCreateDTO branchCreateDTO)
@@ -23,10 +26,11 @@ namespace CRM.Repository
             return false;
         }
 
-        public async Task UpdateAsync(Branch entity)
+        public async Task UpdateAsync(BranchUpdateDTO branchUpdateDTO)
         {
-            entity.UpdateDate = DateTime.Now;   
-            _db.Branches.Update(entity);
+            Branch branch = _mapper.Map<Branch>(branchUpdateDTO);
+            branch.UpdateDate = DateTime.Now;   
+            _db.Branches.Update(branch);
             await SaveAsync();
         }
     }

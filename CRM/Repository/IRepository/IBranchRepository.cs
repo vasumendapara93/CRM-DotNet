@@ -8,6 +8,6 @@ namespace CRM.Repository.IRepository
 
         Task<bool> IsUniqueBranch(BranchCreateDTO branchCreateDTO);
 
-        public Task UpdateAsync(Branch entity);
+        public Task UpdateAsync(BranchUpdateDTO branchUpdateDTO);
     }
 }

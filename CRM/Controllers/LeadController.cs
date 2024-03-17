@@ -17,7 +17,7 @@ namespace CRM.Controllers
         private readonly ILeadRepository _leadRepo;
         private APIResponse _response;
         private readonly IMapper _mapper;
-        public LeadController(ILeadRepository leadRepo, IMapper mapper) { 
+        public LeadController(ILeadRepository leadRepo, IMapper mapper) {
             _leadRepo = leadRepo;
             _response = new APIResponse();
             _mapper = mapper;
@@ -47,7 +47,7 @@ namespace CRM.Controllers
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator")]
-        [HttpPost(Name = "create")]
+        [HttpPost(Name = "LeadCreate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -69,7 +69,7 @@ namespace CRM.Controllers
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator, Assigner, SellsPerson")]
-        [HttpPut("{id}", Name = "Update")]
+        [HttpPut("{id}", Name = "LeadUpdate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -104,7 +104,7 @@ namespace CRM.Controllers
         }
 
         [Authorize(Roles = "Organization, Data Entry Operator")]
-        [HttpDelete("{id}", Name = "Remove")]
+        [HttpDelete("{id}", Name = "LeadRemove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

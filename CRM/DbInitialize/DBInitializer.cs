@@ -25,17 +25,17 @@ namespace CRM.DbInitialize
             }
 
             //Create role and master user of not exist
-            Role defaultRole = new Role
+            Role defaultRole = new()
             {
-                RoleName = "Master User"
+                RoleName = SD.Role_MasterUser
             };
             if (_db.Roles.Count() == 0) {
 
                 _db.Roles.Add(defaultRole);
-                _db.Roles.Add(new Role { RoleName = "Organization" });
-                _db.Roles.Add(new Role { RoleName = "Data Entry Operator" });
-                _db.Roles.Add(new Role { RoleName = "Assiner" });
-                _db.Roles.Add(new Role { RoleName = "Sells Person" });
+                _db.Roles.Add(new Role { RoleName = SD.Role_Organization });
+                _db.Roles.Add(new Role { RoleName = SD.Role_DataEntryOperator });
+                _db.Roles.Add(new Role { RoleName = SD.Role_Assiner });
+                _db.Roles.Add(new Role { RoleName = SD.Role_SalesPerson });
                 
             }
 

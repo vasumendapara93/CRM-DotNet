@@ -17,7 +17,7 @@ namespace CRM.Models.DTOs
 
         [Required]
         public string OrganizationId { get; set; }
-        public DateTime? UpdateDate;
 
+        public DateTime? UpdateDate { get; set; }
     }
 }

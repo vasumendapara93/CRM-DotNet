@@ -10,6 +10,7 @@ namespace CRM.Models.DTOs
         public string BranchCode { get; set; }
         public string OrganizationId { get; set; }
 
-        public DateTime? UpdateDate;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
+        public DateTime? UpdateDate { get; set; }
     }
 }

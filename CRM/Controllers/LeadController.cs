@@ -6,6 +6,7 @@ using CRM.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 
 namespace CRM.Controllers
@@ -24,7 +25,7 @@ namespace CRM.Controllers
         }
 
 
-        [Authorize(Roles = "Organization, Data Entry Operator, Assiner, Sells Person")]
+        [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator + "," + SD.Role_Assiner + "," + SD.Role_SalesPerson)]
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,7 +47,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization, Data Entry Operator")]
+        [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator)]
         [HttpPost(Name = "LeadCreate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,7 +69,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization, Data Entry Operator, Assigner, SellsPerson")]
+        [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator + "," + SD.Role_Assiner + "," + SD.Role_SalesPerson)]
         [HttpPut("{id}", Name = "LeadUpdate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -103,7 +104,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization, Data Entry Operator")]
+        [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator )]
         [HttpDelete("{id}", Name = "LeadRemove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

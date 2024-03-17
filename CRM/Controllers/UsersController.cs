@@ -61,7 +61,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Master User")]
+        [Authorize(Roles = SD.Role_MasterUser)]
         [HttpPost("organization")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -115,7 +115,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Master User, Organization")]
+        [Authorize(Roles = SD.Role_MasterUser + "," + SD.Role_Organization)]
         [HttpPut("organization/{id}", Name = "organization/update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -167,7 +167,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Master User")]
+        [Authorize(Roles = SD.Role_MasterUser)]
         [HttpDelete("organization/{id}", Name = "organization/remove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -198,7 +198,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = SD.Role_Organization)]
         [HttpPost("employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -235,7 +235,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization, Data Entry Operator, Assiner, Sells Person")]
+        [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator + "," +SD.Role_Assiner + "," + SD.Role_SalesPerson)]
         [HttpPut("employee/{id}", Name = "employee/update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -275,7 +275,7 @@ namespace CRM.Controllers
         }
 
 
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = SD.Role_Organization)]
         [HttpDelete("employee/{id}", Name = "employee/remove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -25,7 +25,7 @@ namespace CRM.Controllers
             _response = new APIResponse();
         }
 
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = SD.Role_Organization)]
         [HttpGet("{organizationId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,7 +53,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = SD.Role_Organization)]
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,7 +85,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = SD.Role_Organization)]
         [HttpPut("{id}", Name = "BranchUpdate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -120,7 +120,7 @@ namespace CRM.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = SD.Role_Organization)]
         [HttpDelete("{id}", Name = "BranchRemove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

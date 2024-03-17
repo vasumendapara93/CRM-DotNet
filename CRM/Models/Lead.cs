@@ -52,7 +52,7 @@ namespace CRM.Models
         public string? Description { get; set; }
         public string? Notes { get; set; }
 
-        public DateTime CreateDate = DateTime.Now;
-        public DateTime? UpdateDate;
+        public DateTime CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

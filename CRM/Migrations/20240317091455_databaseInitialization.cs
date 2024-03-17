@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CRM.Migrations
 {
     /// <inheritdoc />
-    public partial class DataBaseMigration : Migration
+    public partial class databaseInitialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,9 @@ namespace CRM.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BranchName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BranchCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrganizationId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    OrganizationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,7 +56,9 @@ namespace CRM.Migrations
                     OrganizationId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SubscriptionStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SubscriptionEndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    SubscriptionEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,7 +102,9 @@ namespace CRM.Migrations
                     ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,7 +120,7 @@ namespace CRM.Migrations
                         column: x => x.OrganizationId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -17,6 +17,7 @@ namespace CRM.Models.DTOs
         public DateTime? SubscriptionStartDate { get; set; }
         public DateTime? SubscriptionEndDate { get; set; }
 
-        public DateTime? UpdateDate;
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdateDate { get; set; }
     }
 }

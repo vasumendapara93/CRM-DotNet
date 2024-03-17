@@ -24,8 +24,8 @@ namespace CRM.Models
         [ValidateNever]
         public User User { get; set; }
 
-        public DateTime CreateDate = DateTime.Now;
-        public DateTime? UpdateDate;
+        public DateTime CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
 
     }
 }

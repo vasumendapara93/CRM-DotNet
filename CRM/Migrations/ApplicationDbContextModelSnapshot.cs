@@ -35,9 +35,15 @@ namespace CRM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("OrganizationId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -66,6 +72,9 @@ namespace CRM.Migrations
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DataEnteryOprator")
                         .IsRequired()
@@ -121,6 +130,9 @@ namespace CRM.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -161,6 +173,9 @@ namespace CRM.Migrations
                     b.Property<string>("ContactPerson")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -194,6 +209,9 @@ namespace CRM.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("SubscriptionStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

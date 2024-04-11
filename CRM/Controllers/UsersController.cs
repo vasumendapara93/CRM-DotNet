@@ -47,7 +47,7 @@ namespace CRM.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Username or Password is invalid");
+                    _response.ErrorMessages.Add("Email or Password Is Invalid");
                     return BadRequest(_response);
                 }
                 _response.StatusCode = HttpStatusCode.OK;
@@ -311,5 +311,20 @@ namespace CRM.Controllers
             }
             return _response;
         }
+
+
+   /*     public async Task<ActionResult<APIResponse>> GetOTP(string email)
+        {
+            try
+            {
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }*/
     }
 }

@@ -312,11 +312,32 @@ namespace CRM.Controllers
             return _response;
         }
 
-
-   /*     public async Task<ActionResult<APIResponse>> GetOTP(string email)
+        [HttpPost("password/change")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> ChangePassword(ChangePasswordDTO changePasswordDTO)
         {
             try
             {
+                if(changePasswordDTO.Email == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Email Not Provided");
+                    return BadRequest(_response);
+                }
+                User user = await _userRepo.GetAsync(u => u.Email == changePasswordDTO.Email);
+                if (user == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Email Not Registered");
+                    return NotFound(_response);
+                }
+                user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(changePasswordDTO.NewPassword, BCrypt.Net.HashType.SHA256); ;
+                await _userRepo.SaveAsync();
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -325,6 +346,6 @@ namespace CRM.Controllers
                 _response.IsSuccess = false;
             }
             return _response;
-        }*/
+        }
     }
 }

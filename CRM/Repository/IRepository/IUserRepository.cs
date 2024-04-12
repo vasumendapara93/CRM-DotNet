@@ -11,6 +11,12 @@ namespace CRM.Repository.IRepository
 
         Task<User> Register(RegisterationRequestDTO registerationRequestDTO);
 
+        Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
+
+        Task<TokenDTO> CreateToken(bool populateExp);
+
+        string HashPassword(string password);
+
         Task Update(User user);
     }
 }

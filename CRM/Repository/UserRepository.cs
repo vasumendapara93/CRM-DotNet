@@ -2,10 +2,15 @@
 using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Sockets;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace CRM.Repository
@@ -14,13 +19,14 @@ namespace CRM.Repository
     {
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
-        string secret;
+        private readonly IConfiguration _configuration;
+        User _user;
         public UserRepository(ApplicationDbContext db, IMapper mapper, IConfiguration configuration) : base(db)
         {
 
             _db = db;
             _mapper = mapper;
-            secret = configuration.GetValue<string>("ApiSettings:SecretKey");
+            _configuration = configuration;
         }
 
         public async Task<bool> IsUniqueUser(string email)
@@ -35,50 +41,110 @@ namespace CRM.Repository
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {
-            User user = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == loginRequestDTO.Email.ToLower());
+           User user = await this.GetAsync(u => u.Email.ToLower() == loginRequestDTO.Email.ToLower());
             if (user == null || !BCrypt.Net.BCrypt.EnhancedVerify(loginRequestDTO.Password, user.Password, BCrypt.Net.HashType.SHA256))
             {
                 return new LoginResponseDTO()
                 {
-                    Token = "",
-                    User = null
+                    TokenDTO = new TokenDTO(),
+                    UserId = null
                 };
             }
 
-            var role = _db.Roles.FirstOrDefault(u=>u.Id == user.RoleId);
+            _user = user;
 
+            TokenDTO tokenDTO = await this.CreateToken(populateExp : true);
+
+            LoginResponseDTO loginResponseDTO = new()
+            {
+                TokenDTO = tokenDTO,
+                UserId = _user.Id,
+            };
+          
+
+            return loginResponseDTO;
+
+        }
+
+        public async Task<TokenDTO> CreateToken(bool populateExp)
+        {
+            var accessToken = GenerateAccessToken();
+            var refreshToken = GenerateRefreshToken();
+
+            _user.RefreshToken = refreshToken;
+            if (populateExp)
+            {
+                _user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            }
+            await this.SaveAsync();
+
+            return new TokenDTO()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+            };
+        }
+
+        private string GenerateAccessToken()
+        {
+            var role = _db.Roles.FirstOrDefault(u => u.Id == _user.RoleId);
             var tokenHandler = new JwtSecurityTokenHandler();
 
+
+            var secret = _configuration.GetValue<string>("JTWSettings:SecretKey");
             var key = Encoding.ASCII.GetBytes(secret);
 
             var tokenDescripter = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new(ClaimTypes.Email, user.Email),
+                        new(ClaimTypes.Email, _user.Email),
                         new(ClaimTypes.Role, role.RoleName),
-                        new(ClaimTypes.Name, user.Name),
+                        new(ClaimTypes.Name, _user.Name),
                     }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddMilliseconds(5000),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescripter);
+            return tokenHandler.WriteToken(token);
+        }
 
-            LoginResponseDTO loginResponseDTO = new()
+        private string GenerateRefreshToken() {
+            var randomNumber = new Byte[32];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                Token = tokenHandler.WriteToken(token),
-                User = user,
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+ /*       private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var jwtSettings = _configuration.GetSection("JTWSettings");
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JTWSettings:SecretKey"))),
+                ValidateIssuer = false,
+                ValidateAudience = false
             };
 
-            return loginResponseDTO;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token,tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
 
-        }
+            if(jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase) ){
+                throw new SecurityTokenException("Invalid Token");
+            }
+            return principal;
+        }*/
 
         public async Task<User> Register(RegisterationRequestDTO registerationRequestDTO)
         {
             User user = _mapper.Map<User>(registerationRequestDTO);
-            user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password, BCrypt.Net.HashType.SHA256);
+            user.Password = HashPassword(user.Password);
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
             return user;
@@ -89,6 +155,30 @@ namespace CRM.Repository
             user.UpdateDate = DateTime.UtcNow;
            _db.Users.Update(user);
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO)
+        { 
+          /*  var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(tokenDTO.AccessToken);
+
+            var EmailFromToken = jwtSecurityToken.Claims.First(claim => claim.Type == "Email").Value;
+            var user = await GetAsync(u=>u.Email == EmailFromToken);*/
+
+            var user = await GetAsync(u=>u.RefreshToken == tokenDTO.RefreshToken);
+
+            if(user is null || !user.RefreshToken.Equals(tokenDTO.RefreshToken) || user.RefreshTokenExpiryTime <= DateTime.UtcNow) {
+                throw new Exception("Refresh Token Bad Request");
+            }
+
+            _user = user;
+
+            return await this.CreateToken(populateExp: false);
+        }
+
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.EnhancedHashPassword(password, BCrypt.Net.HashType.SHA256);
         }
     }
 }

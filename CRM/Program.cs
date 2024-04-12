@@ -35,7 +35,7 @@ builder.Services.AddSession(options =>
 });
 
 
-var key = builder.Configuration.GetValue<string>("ApiSettings:SecretKey");
+var key = builder.Configuration.GetValue<string>("JTWSettings:SecretKey");
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

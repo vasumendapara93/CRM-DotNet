@@ -53,7 +53,10 @@ namespace CRM.Models
 
 
         public DateTime CreateDate { get; set; }
-        public DateTime? UpdateDate {get;set; }
+        public DateTime? UpdateDate {get;set; } 
+
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
     }
 }

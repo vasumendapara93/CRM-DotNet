@@ -28,6 +28,45 @@ namespace CRM.Controllers
             _branchRepo = branchRepo;
         }
 
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> Get(string userId)
+        {
+            try
+            {
+                if (userId == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("UserID Is Not Provided");
+                    return BadRequest(_response);
+                }
+                User user = await _userRepo.GetAsync(u => u.Id == userId, Trecked: false);
+                if (user == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Found");
+                    return NotFound(_response);
+                }
+                
+                _response.StatusCode = HttpStatusCode.OK;
+                user.Password = "";
+                _response.Data = user;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -43,7 +82,7 @@ namespace CRM.Controllers
                     return BadRequest(_response);
                 }
                 LoginResponseDTO loginResponseDTO = await _userRepo.Login(loginRequestDTO);
-                if (loginResponseDTO.User == null || String.IsNullOrEmpty(loginResponseDTO.Token))
+                if (loginResponseDTO.UserId == null || loginResponseDTO.TokenDTO == new TokenDTO())
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -331,12 +370,13 @@ namespace CRM.Controllers
                 User user = await _userRepo.GetAsync(u => u.Email == changePasswordDTO.Email);
                 if (user == null)
                 {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.StatusCode = HttpStatusCode.NotFound;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add("Email Not Registered");
                     return NotFound(_response);
                 }
-                user.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(changePasswordDTO.NewPassword, BCrypt.Net.HashType.SHA256); ;
+                user.Password = _userRepo.HashPassword(changePasswordDTO.NewPassword);
+                user.RefreshTokenExpiryTime = DateTime.UtcNow;
                 await _userRepo.SaveAsync();
                 _response.StatusCode = HttpStatusCode.OK;
             }

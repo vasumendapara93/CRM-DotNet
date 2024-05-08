@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Microsoft.AspNetCore.ResponseCompression;
+using CRM.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,12 @@ builder.Services.AddScoped<IOTPRepository, OTPRepository>();
 builder.Services.AddScoped<IMailServiceRepository, MailServiceRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
+/*builder.Services.AddResponseCompression(options =>
+{
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] {"application/octet-stream"});
+});*/
+    
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -98,7 +106,7 @@ builder.Services.AddCors(options =>
                       });
 });
 
-    var app = builder.Build();  
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

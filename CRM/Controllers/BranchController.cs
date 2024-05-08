@@ -14,16 +14,19 @@ namespace CRM.Controllers
     public class BranchController : ControllerBase
     {
         private readonly IBranchRepository _branchRepo;
+        private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
         private APIResponse _response;
   
 
-        public BranchController( IBranchRepository branchRepo, IMapper mapper)
+        public BranchController( IBranchRepository branchRepo, IMapper mapper, IUserRepository userRepo)
         {
             _branchRepo = branchRepo;
             _mapper = mapper;
             _response = new APIResponse();
+            _userRepo = userRepo;
         }
+
 
         [Authorize(Roles = SD.Role_Organization)]
         [HttpGet("{organizationId}")]
@@ -37,12 +40,24 @@ namespace CRM.Controllers
             {
                 if (organizationId == null)
                 {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id Not Provided");
+                    return NotFound(_response);
+                }
+
+                var org = await _userRepo.GetAsync(u => u.Id == organizationId);
+                if (org == null)
+                {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    return BadRequest(_response);
+                    _response.ErrorMessages.Add("Organization Not Exists");
                 }
+
                 IEnumerable<Branch> branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId);
-                _response.Data = branches;
+                Console.WriteLine(branches);
+                IEnumerable<BranchResponseDTO> branchResponseDTOs = branches.Select(branch => _mapper.Map<BranchResponseDTO>(branch));
+                _response.Data = branchResponseDTOs;
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -52,6 +67,7 @@ namespace CRM.Controllers
             }
             return _response;
         }
+
 
         [Authorize(Roles = SD.Role_Organization)]
         [HttpPost()]
@@ -74,6 +90,52 @@ namespace CRM.Controllers
 
                 Branch branch = _mapper.Map<Branch>(branchCreateDTO);
                 await _branchRepo.CreateAsync(branch);
+                await _branchRepo.SaveAsync();
+
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [Authorize(Roles = SD.Role_Organization)]
+        [HttpPost("range")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<APIResponse>> CreateRange(List<BranchCreateDTO> branchCreateDTOList)
+        {
+            try
+            {
+                if (branchCreateDTOList is null || !branchCreateDTOList.Any())
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Branch List Not Provided");
+                    return BadRequest(_response);
+                }
+
+                List<BranchCreateDTO> NotInsertedRecords = [];
+                foreach (var item in branchCreateDTOList)
+                {
+                    bool isUniqueBranch = await _branchRepo.IsUniqueBranch(item);
+                    if (!isUniqueBranch)
+                    {
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.IsSuccess = false;
+                        _response.Data = item;
+                        _response.ErrorMessages.Add("Branch Already Exists");
+                        return BadRequest(_response);
+                    }
+                }
+                List<Branch> branchList = branchCreateDTOList.Select(branch => _mapper.Map<BranchCreateDTO, Branch>(branch)).ToList();
+                await _branchRepo.CreateRangeAsync(branchList);
+                await _branchRepo.SaveAsync();
 
                 _response.StatusCode = HttpStatusCode.OK;
             }

@@ -6,11 +6,13 @@ namespace CRM.Models.DTOs
 {
     public class BranchCreateDTO
     {
+        [Required]
         public string BranchName { get; set; }
+        [Required]
         public string BranchCode { get; set; }
+        [Required]
         public string OrganizationId { get; set; }
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
-        public DateTime? UpdateDate { get; set; }
     }
 }

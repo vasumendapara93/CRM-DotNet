@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CRM.Models.DTOs
 {
-    public class BranchUpdateDTO
+    public class BranchResponseDTO
     {
         [Required]
-        public string Id;
+        public string Id { get; set; }
 
         [Required]
         public string BranchName { get; set; }
@@ -18,6 +18,11 @@ namespace CRM.Models.DTOs
         [Required]
         public string OrganizationId { get; set; }
 
-        public DateTime? UpdateDate { get; set; } = DateTime.Now;
+        [ForeignKey("OrganizationId")]
+        [ValidateNever]
+        public User User { get; set; }
+
+        public DateTime CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

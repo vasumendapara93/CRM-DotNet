@@ -9,6 +9,8 @@ namespace CRM.Repository.IRepository
 
         public Task CreateAsync(T entity);
 
+        public Task CreateRangeAsync(List<T> ListyOfentity);
+
         public Task RemoveAsync(T entity);
 
         public Task SaveAsync();

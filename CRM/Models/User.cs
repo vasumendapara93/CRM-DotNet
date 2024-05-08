@@ -18,15 +18,13 @@ namespace CRM.Models
 
         public string? ContactPerson { get; set; }
 
-        [Required]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Required]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public string? Address { get; set; }
 
@@ -39,6 +37,8 @@ namespace CRM.Models
 
         public bool IsActive { get; set; } = true;
 
+        public bool IsAccountActiveted { get; set; } = false;
+
         public string? OrganizationId { get; set; } 
 
         public string? BranchId { get; set; }
@@ -47,10 +47,12 @@ namespace CRM.Models
         [ValidateNever]
         public Branch Branch { get; set; }
 
+        public DateTime? JoiningDate { get; set; }
+
         public DateTime? SubscriptionStartDate { get; set; }
 
         public DateTime? SubscriptionEndDate { get; set; }
-
+ 
 
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate {get;set; } 

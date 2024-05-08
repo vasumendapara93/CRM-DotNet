@@ -1,4 +1,5 @@
-﻿using CRM.Models;
+﻿using AutoMapper;
+using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
@@ -17,8 +18,9 @@ namespace CRM.Controllers
         private IEnumerable<Role> _roles;
         private readonly IRoleRepository _roleRepo;
         private readonly ApplicationDbContext _db;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepo, IBranchRepository branchRepo, IRoleRepository roleRepo, ApplicationDbContext db)
+        public UsersController(IUserRepository userRepo, IBranchRepository branchRepo, IRoleRepository roleRepo, ApplicationDbContext db, IMapper mapper)
         {
             _userRepo = userRepo;
             _response = new APIResponse();
@@ -26,6 +28,7 @@ namespace CRM.Controllers
             _roles = _roleRepo.GetAllAsync().GetAwaiter().GetResult();
             _db = db;
             _branchRepo = branchRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -46,7 +49,7 @@ namespace CRM.Controllers
                     _response.ErrorMessages.Add("UserID Is Not Provided");
                     return BadRequest(_response);
                 }
-                User user = await _userRepo.GetAsync(u => u.Id == userId, Trecked: false);
+                User user = await _userRepo.GetAsync(u => u.Id == userId,IncludeProperties: "Role",Trecked: false);
                 if (user == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -57,7 +60,9 @@ namespace CRM.Controllers
                 
                 _response.StatusCode = HttpStatusCode.OK;
                 user.Password = "";
-                _response.Data = user;
+
+                UserResponseDTO responseDTO = _mapper.Map<UserResponseDTO>(user);
+                _response.Data = responseDTO;
             }
             catch (Exception e)
             {
@@ -91,6 +96,91 @@ namespace CRM.Controllers
                 }
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Data = loginResponseDTO;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [Authorize(Roles = SD.Role_MasterUser)]
+        [HttpGet("organization")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<APIResponse>> GetOrganization()
+        {
+            try
+            {
+                var OrgRole = await _roleRepo.GetAsync(u => u.RoleName == SD.Role_Organization);
+                IEnumerable<User> organizations = await _userRepo.GetAllAsync(u => u.RoleId == OrgRole.Id);
+                IEnumerable<UserResponseDTO> orgUserResponseDTO =  organizations.Select(org => _mapper.Map<User, UserResponseDTO>(org));
+                
+                if (organizations == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Found");
+                    return NotFound(_response);
+                }
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Data = orgUserResponseDTO;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [Authorize(Roles = SD.Role_Organization)]
+        [HttpGet("employee/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<APIResponse>> GetEmployees(string id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id Not Provided");
+                    return BadRequest(_response);
+                }
+                var org = await _userRepo.GetAsync(u => u.Id == id);
+
+                if (org == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Organization Not Exists");
+                    return BadRequest(_response);
+                }
+
+                var DataEntryOpraterRole = _roles.FirstOrDefault(u => u.RoleName == SD.Role_DataEntryOperator);
+                var AssignerRole = _roles.FirstOrDefault(u => u.RoleName == SD.Role_Assiner);
+                var SalesPersonRole = _roles.FirstOrDefault(u => u.RoleName == SD.Role_SalesPerson);
+                IEnumerable<User> organizations = await _userRepo.GetAllAsync(u => u.OrganizationId == id && (u.RoleId == DataEntryOpraterRole.Id || u.RoleId == AssignerRole.Id || u.RoleId == SalesPersonRole.Id), IncludeProperties : "Branch");
+                IEnumerable<UserResponseDTO> orgUserResponseDTO = organizations.Select(org => _mapper.Map<User, UserResponseDTO>(org));
+
+                if (organizations == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Found");
+                    return NotFound(_response);
+                }
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Data = orgUserResponseDTO;
             }
             catch (Exception e)
             {
@@ -136,7 +226,8 @@ namespace CRM.Controllers
                 {
                     BranchName = "Default Branch",
                     BranchCode = "01",
-                    OrganizationId = ""
+                    OrganizationId = "",
+                    CreateDate = DateTime.Now,
                 };
 
                 user.BranchId = branch.Id;
@@ -302,6 +393,7 @@ namespace CRM.Controllers
 
                 user.Password = userFormDB.Password;
                 await _userRepo.Update(user);
+                await _userRepo.SaveAsync();
 
                 _response.StatusCode = HttpStatusCode.OK;
             }
@@ -340,6 +432,7 @@ namespace CRM.Controllers
                     return BadRequest(_response);
                 }
                 await _userRepo.RemoveAsync(userFormDB);
+                await _userRepo.SaveAsync();
 
                 _response.StatusCode = HttpStatusCode.OK;
             }

@@ -21,6 +21,12 @@ namespace CRM.Repository
             await SaveAsync();
         }
 
+        public async Task CreateRangeAsync(List<T> ListyOfentity)
+        {
+            await dbSet.AddRangeAsync(ListyOfentity);
+            await SaveAsync();
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? IncludeProperties = null, int PageSize = 0, int PageNo = 1)
         {
             IQueryable<T> query = dbSet;

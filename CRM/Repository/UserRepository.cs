@@ -2,13 +2,10 @@
 using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
-using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Sockets;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -20,14 +17,27 @@ namespace CRM.Repository
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+/*        private readonly SqlTableDependency<User> _sqlTableDependency;
+        private readonly IHubContext<UserHub> _hubContext;*/
         User _user;
         public UserRepository(ApplicationDbContext db, IMapper mapper, IConfiguration configuration) : base(db)
         {
-
+           /* _hubContext = hubContext;  */ 
             _db = db;
             _mapper = mapper;
             _configuration = configuration;
+/*            var connectionString = _configuration.GetConnectionString("DefaultSQLConnection");
+            Console.WriteLine(connectionString);
+            _sqlTableDependency = new SqlTableDependency<User>(connectionString,"Users");
+            _sqlTableDependency.OnChanged += NotifyChange;
+            _sqlTableDependency.Start();*/
         }
+
+   /*     private async void NotifyChange(object sender, RecordChangedEventArgs<User> e)
+        {
+            var users = await GetAllAsync();
+            await _hubContext.Clients.All.SendAsync("RefreshUsers", users);
+        }*/
 
         public async Task<bool> IsUniqueUser(string email)
         {
@@ -102,7 +112,7 @@ namespace CRM.Repository
                         new(ClaimTypes.Role, role.RoleName),
                         new(ClaimTypes.Name, _user.Name),
                     }),
-                Expires = DateTime.UtcNow.AddMilliseconds(5000),
+                Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

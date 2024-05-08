@@ -1,8 +1,5 @@
 ﻿
-
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Models.DTOs
 {
@@ -45,6 +42,6 @@ namespace CRM.Models.DTOs
         public string? Description { get; set; }
         public string? Notes { get; set; }
 
-        public DateTime? UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; } = default(DateTime?);
     }
 }

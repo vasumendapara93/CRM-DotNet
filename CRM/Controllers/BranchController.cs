@@ -78,16 +78,7 @@ namespace CRM.Controllers
         public async Task<ActionResult<APIResponse>> Create(BranchCreateDTO branchCreateDTO)
         {
             try
-            {
-                bool isUniqueBranch = await _branchRepo.IsUniqueBranch(branchCreateDTO);
-                if (!isUniqueBranch)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Branch Already Exists");
-                    return BadRequest(_response);
-                }
-
+            { 
                 Branch branch = _mapper.Map<Branch>(branchCreateDTO);
                 await _branchRepo.CreateAsync(branch);
                 await _branchRepo.SaveAsync();
@@ -120,19 +111,6 @@ namespace CRM.Controllers
                     return BadRequest(_response);
                 }
 
-                List<BranchCreateDTO> NotInsertedRecords = [];
-                foreach (var item in branchCreateDTOList)
-                {
-                    bool isUniqueBranch = await _branchRepo.IsUniqueBranch(item);
-                    if (!isUniqueBranch)
-                    {
-                        _response.StatusCode = HttpStatusCode.BadRequest;
-                        _response.IsSuccess = false;
-                        _response.Data = item;
-                        _response.ErrorMessages.Add("Branch Already Exists");
-                        return BadRequest(_response);
-                    }
-                }
                 List<Branch> branchList = branchCreateDTOList.Select(branch => _mapper.Map<BranchCreateDTO, Branch>(branch)).ToList();
                 await _branchRepo.CreateRangeAsync(branchList);
                 await _branchRepo.SaveAsync();

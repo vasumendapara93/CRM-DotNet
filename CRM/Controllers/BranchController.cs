@@ -34,7 +34,7 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<APIResponse>> GetAll(string organizationId)
+        public async Task<ActionResult<APIResponse>> GetAll(string organizationId,[FromQuery] int PageSize = 0, [FromQuery] int PageNo = 1)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace CRM.Controllers
                     _response.ErrorMessages.Add("Organization Not Exists");
                 }
 
-                IEnumerable<Branch> branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId);
+                IEnumerable<Branch> branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, PageSize : PageSize, PageNo :PageNo);
                 Console.WriteLine(branches);
                 IEnumerable<BranchResponseDTO> branchResponseDTOs = branches.Select(branch => _mapper.Map<BranchResponseDTO>(branch));
                 var totalRecords = _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId).GetAwaiter().GetResult().Count();

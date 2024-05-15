@@ -81,6 +81,12 @@ namespace CRM.Repository
             await SaveAsync();
         }
 
+        public async Task RemoveRangeAsync(List<T> ListOfentity)
+        {
+            dbSet.RemoveRange(ListOfentity);
+            await SaveAsync();
+        }
+
         public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();

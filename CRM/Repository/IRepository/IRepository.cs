@@ -13,6 +13,8 @@ namespace CRM.Repository.IRepository
 
         public Task RemoveAsync(T entity);
 
+        public Task RemoveRangeAsync(List<T> ListOfentity);
+
         public Task SaveAsync();
     }
 }

@@ -4,6 +4,7 @@ using CRM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240514095650_BranchCodeIsNowNotEssensialFieldToCreateBranchInNranchTable")]
+    partial class BranchCodeIsNowNotEssensialFieldToCreateBranchInNranchTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,6 +31,7 @@ namespace CRM.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BranchCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BranchName")
@@ -46,7 +50,7 @@ namespace CRM.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Branches", (string)null);
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("CRM.Models.Lead", b =>
@@ -139,7 +143,7 @@ namespace CRM.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Leads", (string)null);
+                    b.ToTable("Leads");
                 });
 
             modelBuilder.Entity("CRM.Models.Role", b =>
@@ -153,7 +157,7 @@ namespace CRM.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("CRM.Models.User", b =>
@@ -227,7 +231,7 @@ namespace CRM.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CRM.Models.Lead", b =>

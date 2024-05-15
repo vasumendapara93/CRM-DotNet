@@ -8,8 +8,7 @@ namespace CRM.Models.DTOs
     {
         [Required]
         public string BranchName { get; set; }
-        [Required]
-        public string BranchCode { get; set; }
+        public string? BranchCode { get; set; }
         [Required]
         public string OrganizationId { get; set; }
 

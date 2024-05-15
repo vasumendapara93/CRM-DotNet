@@ -57,7 +57,11 @@ namespace CRM.Controllers
                 IEnumerable<Branch> branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId);
                 Console.WriteLine(branches);
                 IEnumerable<BranchResponseDTO> branchResponseDTOs = branches.Select(branch => _mapper.Map<BranchResponseDTO>(branch));
-                _response.Data = branchResponseDTOs;
+                var totalRecords = _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId).GetAwaiter().GetResult().Count();
+                _response.Data = new RecordsResponse { 
+                    TotalRecords = totalRecords,
+                    Records = branchResponseDTOs
+                };
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -99,11 +103,12 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<APIResponse>> CreateRange(List<BranchCreateDTO> branchCreateDTOList)
+        public async Task<ActionResult<APIResponse>> CreateRange([FromBody] List<BranchCreateDTO> branchCreateDTOList)
         {
             try
             {
-                if (branchCreateDTOList is null || !branchCreateDTOList.Any())
+
+                if (branchCreateDTOList is null || branchCreateDTOList.Count == 0)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -187,6 +192,45 @@ namespace CRM.Controllers
                     return NotFound(_response);
                 }
                 await _branchRepo.RemoveAsync(branch);
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [Authorize(Roles = SD.Role_Organization)]
+        [HttpDelete("range")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> RemoveRange(List<string> idList)
+        {
+            try
+            {
+                if (idList is null || idList.Count == 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("ID List Not Provided");
+                    return BadRequest(_response);
+                }
+                List<Branch> branchesToBeDeleted = new List<Branch>();
+                foreach (string id in idList)
+                {
+                    var branch = await _branchRepo.GetAsync(u => u.Id == id);
+                    if(branch != null)
+                    {
+                        branchesToBeDeleted.Add(branch);
+                    }
+                }
+
+                await _branchRepo.RemoveRangeAsync(branchesToBeDeleted);
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)

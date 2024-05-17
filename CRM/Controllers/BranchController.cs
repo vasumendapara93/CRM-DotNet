@@ -2,9 +2,14 @@
 using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
+using CRM.StaticData;
+using CRM.StaticData.ModelFileds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 
 namespace CRM.Controllers
@@ -34,7 +39,7 @@ namespace CRM.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<APIResponse>> GetAll(string organizationId,[FromQuery] int PageSize = 0, [FromQuery] int PageNo = 1)
+        public async Task<ActionResult<APIResponse>> GetAll(string organizationId, [FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] string? order = Order.ASC, [FromQuery] int PageSize = 0, [FromQuery] int PageNo = 1)
         {
             try
             {
@@ -54,10 +59,61 @@ namespace CRM.Controllers
                     _response.ErrorMessages.Add("Organization Not Exists");
                 }
 
-                IEnumerable<Branch> branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, PageSize : PageSize, PageNo :PageNo);
-                Console.WriteLine(branches);
+                IEnumerable<Branch> branches = new List<Branch>();
+                var totalRecords = 0;
+                if (!string.IsNullOrEmpty(search))
+                {
+                    search = search.ToLower().Trim();
+                    if (string.IsNullOrEmpty(orderBy))
+                    {
+                        branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId && (u.BranchName.ToLower().Contains(search) || (u.BranchCode != null && u.BranchCode.ToLower().Contains(search)) || u.CreateDate.Date.ToString().ToLower().Contains(search)), PageSize: PageSize, PageNo: PageNo);
+                    }
+                    else if (string.IsNullOrEmpty(order) || order == Order.ASC)
+                    {
+                        /*order ASC*/
+                        branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId && (u.BranchName.ToLower().Contains(search) || (u.BranchCode != null && u.BranchCode.ToLower().Contains(search)) || u.CreateDate.Date.ToString().ToLower().Contains(search)), OrderBy: _branchRepo.CreateSelectorExpression(orderBy), Order:Order.ASC, PageSize: PageSize, PageNo: PageNo);
+                    }
+                    else {
+                        /*order DSE*/
+                        branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId && (u.BranchName.ToLower().Contains(search) || (u.BranchCode != null && u.BranchCode.ToLower().Contains(search)) || u.CreateDate.Date.ToString().ToLower().Contains(search)), OrderBy: _branchRepo.CreateSelectorExpression(orderBy), Order: Order.DESC, PageSize: PageSize, PageNo: PageNo);
+                    }
+                    totalRecords = _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId && (u.BranchName.ToLower().Contains(search) || (u.BranchCode != null && u.BranchCode.ToLower().Contains(search)) || u.CreateDate.Date.ToString().ToLower().Contains(search))).GetAwaiter().GetResult().Count();
+                }
+                else 
+                {
+                    Console.WriteLine(orderBy);
+                    if (string.IsNullOrEmpty(orderBy) || orderBy == "null")
+                    {
+                        branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, PageSize: PageSize, PageNo: PageNo);
+                    }
+                    else if (string.IsNullOrEmpty(order) || order == Order.ASC)
+                    {
+                        /*order ASC*/
+                        if (orderBy != BranchFields.CreateDate)
+                        {
+                            branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, OrderBy: _branchRepo.CreateSelectorExpression(orderBy), Order: Order.ASC, PageSize: PageSize, PageNo: PageNo);
+                        }
+                        else
+                        {
+                            branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, OrderBy: u => u.CreateDate.ToString(), Order: Order.ASC, PageSize: PageSize, PageNo: PageNo);
+                        }
+                    }
+                    else
+                    {
+                        /*order DSE*/
+                        if (orderBy != BranchFields.CreateDate)
+                        {
+                            branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, OrderBy: _branchRepo.CreateSelectorExpression(orderBy), Order: Order.DESC, PageSize: PageSize, PageNo: PageNo);
+                        }
+                        else
+                        {
+                            branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, OrderBy: u => u.CreateDate.ToString(), Order: Order.DESC, PageSize: PageSize, PageNo: PageNo);
+                        }
+                    }
+                    totalRecords = _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId).GetAwaiter().GetResult().Count();
+                }
                 IEnumerable<BranchResponseDTO> branchResponseDTOs = branches.Select(branch => _mapper.Map<BranchResponseDTO>(branch));
-                var totalRecords = _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId).GetAwaiter().GetResult().Count();
+               
                 _response.Data = new RecordsResponse { 
                     TotalRecords = totalRecords,
                     Records = branchResponseDTOs

@@ -1,4 +1,5 @@
 ﻿using CRM.Repository.IRepository;
+using CRM.StaticData;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -27,12 +28,23 @@ namespace CRM.Repository
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? IncludeProperties = null, int PageSize = 0, int PageNo = 1)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, Expression<Func<T, string>>? OrderBy = null, string? IncludeProperties = null,string Order = Order.ASC, int PageSize = 0, int PageNo = 1)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
+            }
+            if (OrderBy != null)
+            {
+                if(Order == StaticData.Order.DESC)
+                {
+                    query = query.OrderByDescending(OrderBy);
+                }
+                else
+                {
+                    query = query.OrderBy(OrderBy);
+                }
             }
             if (PageSize > 0)
             {
@@ -90,6 +102,13 @@ namespace CRM.Repository
         public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();
+        }
+
+        public Expression<Func<T, string>> CreateSelectorExpression(string propertyName)
+        {
+            var paramterExpression = Expression.Parameter(typeof(T));
+            return (Expression<Func<T, string>>)Expression.Lambda(Expression.PropertyOrField(paramterExpression, propertyName),
+                                                                    paramterExpression);
         }
     }
 }

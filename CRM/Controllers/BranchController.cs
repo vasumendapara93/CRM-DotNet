@@ -64,11 +64,11 @@ namespace CRM.Controllers
                 if (!string.IsNullOrEmpty(search))
                 {
                     search = search.ToLower().Trim();
-                    if (string.IsNullOrEmpty(orderBy))
+                    if (string.IsNullOrEmpty(orderBy) || orderBy == "null")
                     {
                         branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId && (u.BranchName.ToLower().Contains(search) || (u.BranchCode != null && u.BranchCode.ToLower().Contains(search)) || u.CreateDate.Date.ToString().ToLower().Contains(search)), PageSize: PageSize, PageNo: PageNo);
                     }
-                    else if (string.IsNullOrEmpty(order) || order == Order.ASC)
+                    else if (string.IsNullOrEmpty(order) || order == "null" || order == Order.ASC)
                     {
                         /*order ASC*/
                         branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId && (u.BranchName.ToLower().Contains(search) || (u.BranchCode != null && u.BranchCode.ToLower().Contains(search)) || u.CreateDate.Date.ToString().ToLower().Contains(search)), OrderBy: _branchRepo.CreateSelectorExpression(orderBy), Order:Order.ASC, PageSize: PageSize, PageNo: PageNo);
@@ -86,7 +86,7 @@ namespace CRM.Controllers
                     {
                         branches = await _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId, PageSize: PageSize, PageNo: PageNo);
                     }
-                    else if (string.IsNullOrEmpty(order) || order == Order.ASC)
+                    else if (string.IsNullOrEmpty(order) || order == "null" || order == Order.ASC)
                     {
                         /*order ASC*/
                         if (orderBy != BranchFields.CreateDate)
@@ -197,10 +197,11 @@ namespace CRM.Controllers
         {
             try
             {
-                if (id is null || branchUpdateDTO.Id != id)
+                if (id is null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id Not Provided");
                     return BadRequest(_response);
                 }
                 var branchFromDB = await _branchRepo.GetAsync(u => u.Id == id, Trecked: false);
@@ -208,8 +209,10 @@ namespace CRM.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Branch Not Exists");
                     return NotFound(_response);
                 }
+                branchUpdateDTO.Id = branchFromDB.Id;
                 await _branchRepo.UpdateAsync(branchUpdateDTO);
                 _response.StatusCode = HttpStatusCode.OK;
             }

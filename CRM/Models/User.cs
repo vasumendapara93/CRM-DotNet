@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,6 +28,8 @@ namespace CRM.Models
         public string? Password { get; set; }
 
         public string? Address { get; set; }
+        [DefaultValue(CRM.StaticData.Gender.NotToSay)]
+        public string? Gender { get; set; }
 
         [Required]
         public string RoleId { get; set; }

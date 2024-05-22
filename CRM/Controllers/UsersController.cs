@@ -3,6 +3,7 @@ using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,8 +21,9 @@ namespace CRM.Controllers
         private readonly IRoleRepository _roleRepo;
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UsersController(IUserRepository userRepo, IBranchRepository branchRepo, IRoleRepository roleRepo, ApplicationDbContext db, IMapper mapper)
+        public UsersController(IUserRepository userRepo, IBranchRepository branchRepo, IRoleRepository roleRepo, ApplicationDbContext db, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _userRepo = userRepo;
             _response = new APIResponse();
@@ -30,6 +32,7 @@ namespace CRM.Controllers
             _db = db;
             _branchRepo = branchRepo;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -512,6 +515,120 @@ namespace CRM.Controllers
 
                 var user = _mapper.Map<User>(updateDTO);
                 await _userRepo.Update(user);
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+
+        [Authorize]
+        [HttpPost("image/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> UpdateImage(string id,[FromForm] IFormFile imageFile)
+        {
+            try
+            {
+                if (id is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id not Provided");
+                    return BadRequest(_response);
+                }
+                if (imageFile is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Image File not Provided");
+                    return BadRequest(_response);
+                } 
+                User userFormDB = await _userRepo.GetAsync(u => u.Id == id);
+                if (userFormDB == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Existes");
+                    return NotFound(_response);
+                }
+
+                string storageFolder = _webHostEnvironment.ContentRootPath;
+                if (!(string.IsNullOrEmpty(userFormDB.Image)))
+                {
+                    var oldImagePath = Path.Combine(storageFolder, userFormDB.Image.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                string imagePath = @"Storage\Images\ProfileImages";
+                string finalPath = Path.Combine(storageFolder, imagePath);
+                if (!Directory.Exists(finalPath))
+                {
+                    Directory.CreateDirectory(finalPath);
+                }
+
+                using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                {
+                    imageFile.CopyTo(fileStream);
+                }
+                userFormDB.Image = @"\" + imagePath + @"\" + fileName;
+                await _userRepo.SaveAsync();
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [Authorize]
+        [HttpDelete("image/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> DeleteImage(string id)
+        {
+            try
+            {
+                if (id is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id not Provided");
+                    return BadRequest(_response);
+                }
+                User userFormDB = await _userRepo.GetAsync(u => u.Id == id);
+                if (userFormDB == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Existes");
+                    return NotFound(_response);
+                }
+
+                string storageFolder = _webHostEnvironment.ContentRootPath;
+                if (!(string.IsNullOrEmpty(userFormDB.Image)))
+                {
+                    var oldImagePath = Path.Combine(storageFolder, userFormDB.Image.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                userFormDB.Image = null;
+                await _userRepo.SaveAsync();
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)

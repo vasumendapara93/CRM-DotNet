@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.ResponseCompression;
 using CRM.Hubs;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -119,10 +120,16 @@ app.UseHttpsRedirection();
 app.UseSession();
 
 app.UseCors(MyAllowSpecificOrigins);
-app.UseCors(builder => builder
+/*app.UseCors(builder => builder
      .AllowAnyOrigin()
      .AllowAnyMethod()
-     .AllowAnyHeader());
+     .AllowAnyHeader());*/
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider  = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath,"Storage")),
+    RequestPath = "/Storage"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

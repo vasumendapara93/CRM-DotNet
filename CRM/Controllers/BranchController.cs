@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
+using CRM.Model;
 using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
 using CRM.StaticData;
 using CRM.StaticData.ModelFileds;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Globalization;
-using System.Linq;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace CRM.Controllers
@@ -111,6 +109,8 @@ namespace CRM.Controllers
                         }
                     }
                     totalRecords = _branchRepo.GetAllAsync(u => u.OrganizationId == organizationId).GetAwaiter().GetResult().Count();
+                    var pagination = new Pagination { PageNo = PageNo, PageSize = PageSize };
+                    Response.Headers.Add("x-pagination", JsonConvert.SerializeObject(pagination));
                 }
                 IEnumerable<BranchResponseDTO> branchResponseDTOs = branches.Select(branch => _mapper.Map<BranchResponseDTO>(branch));
                

@@ -11,6 +11,7 @@ namespace CRM
         {
             CreateMap<User, RegisterationRequestDTO>().ReverseMap();
             CreateMap<User, UserResponseDTO>().ReverseMap();
+            CreateMap<User, UserUpdateDTO>().ReverseMap();
 
             CreateMap<Branch, BranchCreateDTO>().ReverseMap();
             CreateMap<Branch, BranchUpdateDTO>().ReverseMap();

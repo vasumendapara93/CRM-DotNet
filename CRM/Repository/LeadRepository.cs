@@ -2,7 +2,6 @@
 using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
-using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repository
 {

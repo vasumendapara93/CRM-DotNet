@@ -3,6 +3,7 @@ using CRM.Models;
 using CRM.Models.DTOs;
 using CRM.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -471,6 +472,46 @@ namespace CRM.Controllers
                 user.Password = _userRepo.HashPassword(changePasswordDTO.NewPassword);
                 user.RefreshTokenExpiryTime = DateTime.UtcNow;
                 await _userRepo.SaveAsync();
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [HttpPatch("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> UpdatePartialUser(string id, JsonPatchDocument<UserUpdateDTO> userUpadteDTOPatch)
+        {
+            try
+            {
+                if (userUpadteDTOPatch == null || id is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id or UserUpdatePatch not Provided");
+                    return BadRequest(_response);
+                }
+                User userFormDB = await _userRepo.GetAsync(u => u.Id == id, Trecked: false);
+                if (userFormDB == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Existes");
+                    return NotFound(_response);
+                }
+                var updateDTO = _mapper.Map<UserUpdateDTO>(userFormDB);
+                userUpadteDTOPatch.ApplyTo(updateDTO);
+
+                var user = _mapper.Map<User>(updateDTO);
+                await _userRepo.Update(user);
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)

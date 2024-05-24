@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Storage\Images\ProfileImages\bba2fa14-0dae-40a0-8c67-742c1d2363f4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Google.Apis.Admin.Directory.directory_v1" Version="1.68.0.3406" />
@@ -28,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Storage\" />
+    <Folder Include="Storage\Images\ProfileImages\" />
   </ItemGroup>
 
 </Project>

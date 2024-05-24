@@ -4,6 +4,6 @@ namespace CRM.Repository.IRepository
 {
     public interface IMailServiceRepository
     {
-        public void sendMail(string email,string subject, string mailBody);
+        public Task sendMail(string email,string subject, string mailBody);
     }
 }

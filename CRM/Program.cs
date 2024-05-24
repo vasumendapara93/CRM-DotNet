@@ -27,6 +27,7 @@ builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<IOTPRepository, OTPRepository>();
 builder.Services.AddScoped<IMailServiceRepository, MailServiceRepository>();
+builder.Services.AddScoped<IUserActivationTokenRepository, UserActivationTokenRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 /*builder.Services.AddResponseCompression(options =>

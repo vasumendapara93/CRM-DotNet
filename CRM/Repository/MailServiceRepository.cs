@@ -6,12 +6,13 @@ namespace CRM.Repository
 {
     public class MailServiceRepository : IMailServiceRepository
     {
-        public void sendMail(string email, string subject, string mailBody)
+        public async Task sendMail(string email, string subject, string mailBody)
         {
             string fromEmail = "mrkingmoradiya@gmail.com";
             MailMessage mailMessage = new MailMessage(fromEmail, email);
             mailMessage.From = new MailAddress("mrkingmoradiya@gmail.com", "Limpid Systems CRM");
             mailMessage.Subject = subject;
+            mailMessage.IsBodyHtml = true;
             mailMessage.Body = mailBody;
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;

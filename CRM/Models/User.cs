@@ -40,7 +40,7 @@ namespace CRM.Models
 
         public bool IsActive { get; set; } = true;
 
-        public bool IsAccountActiveted { get; set; } = false;
+        public bool IsAccountActivated { get; set; }
 
         public string? OrganizationId { get; set; } 
 

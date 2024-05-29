@@ -310,7 +310,7 @@ namespace CRM.Controllers
 
 
 
-                string mailHtmlBody = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body, table, td, p, a, h1 {{\r\n            -webkit-text-size-adjust: 100%;\r\n            -ms-text-size-adjust: 100%;\r\n            margin: 0;\r\n            padding: 0;\r\n            border: 0;\r\n            font-family: Arial, sans-serif;\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n        }}\r\n        body{{\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n            background-color: gray;\r\n        }}\r\n        td, p{{\r\n            text-align: start;\r\n        }}\r\n        .container {{\r\n            width: auto;\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            background-color: #ffffff;\r\n            border: 1px solid #cccccc;\r\n            gap: 1rem;\r\n            border: none;\r\n            border-top: 5px solid red;\r\n        }}\r\n        .logo {{\r\n            text-align: center;\r\n            padding: 20px;\r\n        }}\r\n        .content {{\r\n            padding-left: 3rem;\r\n            padding-right: 3rem;\r\n            margin-bottom: 2rem;\r\n            text-align: center;\r\n            letter-spacing: 0.5px;\r\n            font-weight: 400;\r\n            color: black;\r\n            line-height: 25px;\r\n            font-size: 0.95rem;\r\n        }}\r\n        .content-p{{\r\n            margin-top: 0.2rem;\r\n        }}\r\n        .button {{\r\n            display: inline-block;\r\n            background-color: #4CAF50;\r\n            color: white;\r\n            padding: 10px 20px;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n            margin-top: 1rem;\r\n            margin-bottom: 1rem;\r\n        }}\r\n        .footer {{\r\n            background-color: #f2f2f2;\r\n            padding: 10px;\r\n            text-align: center;\r\n            font-size: 14px;\r\n            color: #202020;\r\n            height:3rem;\r\n            background: #fbe0e0;\r\n        }}\r\n    </style>\r\n</head>\r\n<body style=\"background: #023b46;\">\r\n    <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" >\r\n        <tr>\r\n            <td>\r\n                <div class=\"logo\">\r\n                    <img style=\"width: 200px;\" src=\"https://r1dq4k84-7246.inc1.devtunnels.ms/Storage/Images/logo-dark-mail.png\" alt=\"Limpid Systems\">\r\n                </div>\r\n                <div class=\"content\">\r\n                    <h1>Activate your account!</h1>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\" style=\"font-weight:700;\">Hello,</p>\r\n                    <p class=\"content-p\" >Welcome to Limpid CRM! We're so happy you're here.</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Activate your account by clicking the link below:</p>\r\n                   " +
+                string mailHtmlBody = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body, table, td, p, a, h1 {{\r\n            -webkit-text-size-adjust: 100%;\r\n            -ms-text-size-adjust: 100%;\r\n            margin: 0;\r\n            padding: 0;\r\n            border: 0;\r\n            font-family: Arial, sans-serif;\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n        }}\r\n        body{{\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n            background-color: gray;\r\n        }}\r\n        td, p{{\r\n            text-align: start;\r\n        }}\r\n        .container {{\r\n            width: auto;\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            background-color: #ffffff;\r\n            border: 1px solid #cccccc;\r\n            gap: 1rem;\r\n            border: none;\r\n            border-top: 5px solid red;\r\n        }}\r\n        .logo {{\r\n            text-align: center;\r\n            padding: 20px;\r\n        }}\r\n        .content {{\r\n            padding-left: 3rem;\r\n            padding-right: 3rem;\r\n            margin-bottom: 2rem;\r\n            text-align: center;\r\n            letter-spacing: 0.5px;\r\n            font-weight: 400;\r\n            color: black;\r\n            line-height: 25px;\r\n            font-size: 0.95rem;\r\n        }}\r\n        .content-p{{\r\n            margin-top: 0.2rem;\r\n        }}\r\n        .button {{\r\n            display: inline-block;\r\n            background-color: #4CAF50;\r\n            color: white;\r\n            padding: 10px 20px;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n            margin-top: 1rem;\r\n            margin-bottom: 1rem;\r\n        }}\r\n        .footer {{\r\n            background-color: #f2f2f2;\r\n            padding: 10px;\r\n            text-align: center;\r\n            font-size: 14px;\r\n            color: #202020;\r\n            height:3rem;\r\n            background: #fbe0e0;\r\n        }}\r\n    </style>\r\n</head>\r\n<body style=\"background: #023b46;\">\r\n    <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" >\r\n        <tr>\r\n            <td>\r\n                <div class=\"logo\">\r\n                    <img style=\"width: 200px;\" src=\"https://r1dq4k84-7246.inc1.devtunnels.ms/Storage/Images/logo-dark-mail.png\" alt=\"Limpid Systems\">\r\n                </div>\r\n                <div class=\"content\">\r\n                    <h1>Activate your account!</h1>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\" style=\"font-weight:700;\">Hello, {user.Name}</p>\r\n                    <p class=\"content-p\" >Welcome to Limpid CRM! We're so happy you're here.</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Activate your account by clicking the link below:</p>\r\n                   " +
                     $" <a href=\"" + $"{_configuration.GetValue<string>("AllowedURL")}/account/a?id={user.Id}&token={userActivationToken.ActivationToken}" + "\" class=\"button\" style=\"color: #ffffff;\">Activate Your Account</a>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Questions about CRM?</p>\r\n                    <p class=\"content-p\">We'll be in touch with you, but should you need to reach our team sooner, feel free to contact us at:\r\n                        <a style=\"color:#0068ff;\" href=\"mailto:support@limpidsystems.com\">support@limpidsystems.com</a>\r\n                    </p>\r\n                    <p class=\"content-p\">We're happy to help!</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\">\r\n                        Cheers,\r\n                        <br>\r\n                        <p style=\"font-weight:700;\">The Limpid CRM Team</p>\r\n                    </p>\r\n                </div>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <td class=\"footer\">© 2024, LimpidSystems All Rights Reserved.</td>\r\n        </tr>\r\n    </table>\r\n</body>\r\n</html>";
                 _mailService.sendMail(user.Email, "Welcome to Limpid CRM", mailHtmlBody);
                 _response.StatusCode = HttpStatusCode.OK;
@@ -349,7 +349,7 @@ namespace CRM.Controllers
                     return BadRequest(_response);
                 }
 
-                if (user.IsAccountActiveted)
+                if (user.IsAccountActivated)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -390,7 +390,7 @@ namespace CRM.Controllers
 
                 user.Name = userActivationRequestDTO.Name;
                 user.Password = _userRepo.HashPassword(userActivationRequestDTO.Password);
-                user.IsAccountActiveted = true;
+                user.IsAccountActivated = true;
 
                 if (user.Role.RoleName == SD.Role_Organization)
                 {
@@ -412,6 +412,75 @@ namespace CRM.Controllers
                 _response.StatusCode = HttpStatusCode.OK;
 
 
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [HttpPost("activatation/resend/{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<APIResponse>> ResendActivationRequest(string id)
+        {
+            try
+            {
+                if (id is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id Data Not Provided");
+                    return BadRequest(_response);
+                }
+
+                User user = await _userRepo.GetAsync(u => u.Id == id);
+                if (user == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User Not Exists");
+                    return BadRequest(_response);
+                }
+
+                if (user.IsAccountActivated)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Account Is Already Active");
+                    return BadRequest(_response);
+                }
+
+                UserActivationToken userActivationToken = new UserActivationToken();
+                userActivationToken = await _userActivationTokenRepo.GetAsync(u => u.UserId == user.Id);
+                if (userActivationToken != null)
+                {
+                    userActivationToken.ActivationToken = _userActivationTokenRepo.CreateActivationToken();
+                    userActivationToken.ActivationTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                    await _userActivationTokenRepo.SaveAsync();
+                }
+                else
+                {
+                    userActivationToken = new()
+                    {
+                        UserId = user.Id,
+                        ActivationToken = _userActivationTokenRepo.CreateActivationToken(),
+                        ActivationTokenExpiryTime = DateTime.UtcNow.AddDays(7)
+                    };
+
+                    await _userActivationTokenRepo.CreateAsync(userActivationToken);
+                }
+
+
+
+                string mailHtmlBody = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body, table, td, p, a, h1 {{\r\n            -webkit-text-size-adjust: 100%;\r\n            -ms-text-size-adjust: 100%;\r\n            margin: 0;\r\n            padding: 0;\r\n            border: 0;\r\n            font-family: Arial, sans-serif;\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n        }}\r\n        body{{\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n            background-color: gray;\r\n        }}\r\n        td, p{{\r\n            text-align: start;\r\n        }}\r\n        .container {{\r\n            width: auto;\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            background-color: #ffffff;\r\n            border: 1px solid #cccccc;\r\n            gap: 1rem;\r\n            border: none;\r\n            border-top: 5px solid red;\r\n        }}\r\n        .logo {{\r\n            text-align: center;\r\n            padding: 20px;\r\n        }}\r\n        .content {{\r\n            padding-left: 3rem;\r\n            padding-right: 3rem;\r\n            margin-bottom: 2rem;\r\n            text-align: center;\r\n            letter-spacing: 0.5px;\r\n            font-weight: 400;\r\n            color: black;\r\n            line-height: 25px;\r\n            font-size: 0.95rem;\r\n        }}\r\n        .content-p{{\r\n            margin-top: 0.2rem;\r\n        }}\r\n        .button {{\r\n            display: inline-block;\r\n            background-color: #4CAF50;\r\n            color: white;\r\n            padding: 10px 20px;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n            margin-top: 1rem;\r\n            margin-bottom: 1rem;\r\n        }}\r\n        .footer {{\r\n            background-color: #f2f2f2;\r\n            padding: 10px;\r\n            text-align: center;\r\n            font-size: 14px;\r\n            color: #202020;\r\n            height:3rem;\r\n            background: #fbe0e0;\r\n        }}\r\n    </style>\r\n</head>\r\n<body style=\"background: #023b46;\">\r\n    <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" >\r\n        <tr>\r\n            <td>\r\n                <div class=\"logo\">\r\n                    <img style=\"width: 200px;\" src=\"https://r1dq4k84-7246.inc1.devtunnels.ms/Storage/Images/logo-dark-mail.png\" alt=\"Limpid Systems\">\r\n                </div>\r\n                <div class=\"content\">\r\n                    <h1>Activate your account!</h1>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\" style=\"font-weight:700;\">Hello, {user.Name}</p>\r\n                    <p class=\"content-p\" >Welcome to Limpid CRM! We're so happy you're here.</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Activate your account by clicking the link below:</p>\r\n                   " +
+                    $" <a href=\"" + $"{_configuration.GetValue<string>("AllowedURL")}/account/a?id={user.Id}&token={userActivationToken.ActivationToken}" + "\" class=\"button\" style=\"color: #ffffff;\">Activate Your Account</a>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Questions about CRM?</p>\r\n                    <p class=\"content-p\">We'll be in touch with you, but should you need to reach our team sooner, feel free to contact us at:\r\n                        <a style=\"color:#0068ff;\" href=\"mailto:support@limpidsystems.com\">support@limpidsystems.com</a>\r\n                    </p>\r\n                    <p class=\"content-p\">We're happy to help!</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\">\r\n                        Cheers,\r\n                        <br>\r\n                        <p style=\"font-weight:700;\">The Limpid CRM Team</p>\r\n                    </p>\r\n                </div>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <td class=\"footer\">© 2024, LimpidSystems All Rights Reserved.</td>\r\n        </tr>\r\n    </table>\r\n</body>\r\n</html>";
+                _mailService.sendMail(user.Email, "Welcome to Limpid CRM", mailHtmlBody);
+                _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)
             {
@@ -492,8 +561,59 @@ namespace CRM.Controllers
                     _response.ErrorMessages.Add("User Not Exists");
                     return BadRequest(_response);
                 }
+                UserActivationToken userActivationToken = await _userActivationTokenRepo.GetAsync(u=>u.UserId == id);
+                if(userActivationToken != null)
+                {
+                       await _userActivationTokenRepo.RemoveAsync(userActivationToken);
+                }
                 await _userRepo.RemoveAsync(userFormDB);
 
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [Authorize(Roles = SD.Role_MasterUser)]
+        [HttpDelete("organization/range")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> RemoveRange(List<string> idList)
+        {
+            try
+            {
+                if (idList is null || idList.Count == 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("ID List Not Provided");
+                    return BadRequest(_response);
+                }
+                List<User> userTobeDelete = new List<User>();
+                List<UserActivationToken> userActivationTokensTobeDelete = new List<UserActivationToken>();
+                foreach (string id in idList)
+                {
+                    var user = await _userRepo.GetAsync(u => u.Id == id);
+                    if (user != null)
+                    {
+                        userTobeDelete.Add(user);
+                    }
+                    var userActivationToken = await _userActivationTokenRepo.GetAsync(u => u.UserId == id);
+                    if (user != null)
+                    {
+                        userActivationTokensTobeDelete.Add(userActivationToken);
+                    }
+                }
+
+                await _userActivationTokenRepo.RemoveRangeAsync(userActivationTokensTobeDelete);
+                await _userRepo.RemoveRangeAsync(userTobeDelete);
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -523,14 +643,75 @@ namespace CRM.Controllers
                     return BadRequest(_response);
                 }
 
-                User user = await _userRepo.Register(registerationRequestDTO);
+                if (registerationRequestDTO.RoleName == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Role Not Provided");
+                    return BadRequest(_response);
+                }
+
+                if (registerationRequestDTO.OrganizationId == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Organization Id Not Provided");
+                    return BadRequest(_response);
+                }
+                if (registerationRequestDTO.BranchId == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Branch Id Not Provided");
+                    return BadRequest(_response);
+                }
+                registerationRequestDTO.BranchId = null;
+                registerationRequestDTO.OrganizationId = null;
+                var roleId = _roles.FirstOrDefault(u => u.RoleName == registerationRequestDTO.RoleName).Id;
+                if(roleId is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Role Does Not Exists");
+                    return BadRequest(_response);
+                }
+                registerationRequestDTO.RoleId = roleId;
+                
+                User user = _mapper.Map<User>(registerationRequestDTO);
+
+                await _userRepo.CreateAsync(user);
                 if (user == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Some Error While Registering");
+                    _response.ErrorMessages.Add("Some Error While Requesting");
                     return BadRequest(_response);
                 }
+                UserActivationToken userActivationToken = new UserActivationToken();
+                userActivationToken = await _userActivationTokenRepo.GetAsync(u => u.UserId == user.Id);
+                if (userActivationToken != null)
+                {
+                    userActivationToken.ActivationToken = _userActivationTokenRepo.CreateActivationToken();
+                    userActivationToken.ActivationTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                    await _userActivationTokenRepo.SaveAsync();
+                }
+                else
+                {
+                    userActivationToken = new()
+                    {
+                        UserId = user.Id,
+                        ActivationToken = _userActivationTokenRepo.CreateActivationToken(),
+                        ActivationTokenExpiryTime = DateTime.UtcNow.AddDays(7)
+                    };
+
+                    await _userActivationTokenRepo.CreateAsync(userActivationToken);
+                }
+
+
+
+                string mailHtmlBody = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body, table, td, p, a, h1 {{\r\n            -webkit-text-size-adjust: 100%;\r\n            -ms-text-size-adjust: 100%;\r\n            margin: 0;\r\n            padding: 0;\r\n            border: 0;\r\n            font-family: Arial, sans-serif;\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n        }}\r\n        body{{\r\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n            background-color: gray;\r\n        }}\r\n        td, p{{\r\n            text-align: start;\r\n        }}\r\n        .container {{\r\n            width: auto;\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            background-color: #ffffff;\r\n            border: 1px solid #cccccc;\r\n            gap: 1rem;\r\n            border: none;\r\n            border-top: 5px solid red;\r\n        }}\r\n        .logo {{\r\n            text-align: center;\r\n            padding: 20px;\r\n        }}\r\n        .content {{\r\n            padding-left: 3rem;\r\n            padding-right: 3rem;\r\n            margin-bottom: 2rem;\r\n            text-align: center;\r\n            letter-spacing: 0.5px;\r\n            font-weight: 400;\r\n            color: black;\r\n            line-height: 25px;\r\n            font-size: 0.95rem;\r\n        }}\r\n        .content-p{{\r\n            margin-top: 0.2rem;\r\n        }}\r\n        .button {{\r\n            display: inline-block;\r\n            background-color: #4CAF50;\r\n            color: white;\r\n            padding: 10px 20px;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n            margin-top: 1rem;\r\n            margin-bottom: 1rem;\r\n        }}\r\n        .footer {{\r\n            background-color: #f2f2f2;\r\n            padding: 10px;\r\n            text-align: center;\r\n            font-size: 14px;\r\n            color: #202020;\r\n            height:3rem;\r\n            background: #fbe0e0;\r\n        }}\r\n    </style>\r\n</head>\r\n<body style=\"background: #023b46;\">\r\n    <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" >\r\n        <tr>\r\n            <td>\r\n                <div class=\"logo\">\r\n                    <img style=\"width: 200px;\" src=\"https://r1dq4k84-7246.inc1.devtunnels.ms/Storage/Images/logo-dark-mail.png\" alt=\"Limpid Systems\">\r\n                </div>\r\n                <div class=\"content\">\r\n                    <h1>Activate your account!</h1>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\" style=\"font-weight:700;\">Hello,</p>\r\n                    <p class=\"content-p\" >Welcome to Limpid CRM! We're so happy you're here.</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Activate your account by clicking the link below:</p>\r\n                   " +
+                    $" <a href=\"" + $"{_configuration.GetValue<string>("AllowedURL")}/account/a?id={user.Id}&token={userActivationToken.ActivationToken}" + "\" class=\"button\" style=\"color: #ffffff;\">Activate Your Account</a>\r\n                    <p class=\"content-p\" style=\"margin-top: 1rem;\">Questions about CRM?</p>\r\n                    <p class=\"content-p\">We'll be in touch with you, but should you need to reach our team sooner, feel free to contact us at:\r\n                        <a style=\"color:#0068ff;\" href=\"mailto:support@limpidsystems.com\">support@limpidsystems.com</a>\r\n                    </p>\r\n                    <p class=\"content-p\">We're happy to help!</p>\r\n                    <p class=\"content-p\" style=\"margin-top: 2rem;\">\r\n                        Cheers,\r\n                        <br>\r\n                        <p style=\"font-weight:700;\">The Limpid CRM Team</p>\r\n                    </p>\r\n                </div>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <td class=\"footer\">© 2024, LimpidSystems All Rights Reserved.</td>\r\n        </tr>\r\n    </table>\r\n</body>\r\n</html>";
+                _mailService.sendMail(user.Email, "Welcome to Limpid CRM", mailHtmlBody);
                 _response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -686,6 +867,8 @@ namespace CRM.Controllers
                 userUpadteDTOPatch.ApplyTo(updateDTO);
 
                 var user = _mapper.Map<User>(updateDTO);
+                user.IsAccountActivated = userFormDB.IsAccountActivated;
+                user.Password = userFormDB.Password;
                 await _userRepo.Update(user);
                 _response.StatusCode = HttpStatusCode.OK;
             }

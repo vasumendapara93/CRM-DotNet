@@ -26,8 +26,6 @@ namespace CRM.Models.DTOs
 
         public bool? IsActive { get; set; }
 
-        public bool? IsAccountActiveted { get; set; }
-
         public string? OrganizationId { get; set; }
 
         public string? BranchId { get; set; }

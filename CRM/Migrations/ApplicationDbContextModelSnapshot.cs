@@ -183,7 +183,7 @@ namespace CRM.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsAccountActiveted")
+                    b.Property<bool>("IsAccountActivated")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsActive")

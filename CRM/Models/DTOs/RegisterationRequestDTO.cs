@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace CRM.Models.DTOs
-{
+﻿namespace CRM.Models.DTOs
+{   
     public class RegisterationRequestDTO
     {
         public string Name { get; set; }
@@ -13,7 +9,14 @@ namespace CRM.Models.DTOs
         public string? RoleId { get; set; }
         public string? OrganizationId { get; set; }
         public string? BranchId { get; set; }
+        public string? Gender { get; set; }
+        public string? RoleName { get; set; }
+        public bool isAccountActivated = false;
+        public RegisterationRequestDTO()
+        {
+            this.Gender = StaticData.Gender.NotToSay;
+        }
 
-        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CRM.Models;
+using CRM.StaticData;
 using Microsoft.EntityFrameworkCore;
 namespace CRM.DbInitialize
 {
@@ -54,6 +55,9 @@ namespace CRM.DbInitialize
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("Master User", BCrypt.Net.HashType.SHA256),
                     RoleId = defaultRole.Id,
                     CreateDate = DateTime.Now,
+                    IsAccountActivated = true,
+                    IsActive = true,
+                    Gender = Gender.NotToSay
                 });
             }
             _db.SaveChanges();

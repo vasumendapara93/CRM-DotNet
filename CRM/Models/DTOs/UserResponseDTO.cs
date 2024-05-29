@@ -34,7 +34,9 @@ namespace CRM.Models.DTOs
             [ValidateNever]
             public Role Role { get; set; }
 
-            public bool IsActive { get; set; } = true;
+            public bool IsActive { get; set; }
+
+            public bool IsAccountActivated { get; set; }
 
             public string? OrganizationId { get; set; }
 

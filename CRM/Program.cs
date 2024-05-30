@@ -28,6 +28,7 @@ builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<IOTPRepository, OTPRepository>();
 builder.Services.AddScoped<IMailServiceRepository, MailServiceRepository>();
 builder.Services.AddScoped<IUserActivationTokenRepository, UserActivationTokenRepository>();
+builder.Services.AddScoped<ILeadNoteRepository, LeadNoteRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 /*builder.Services.AddResponseCompression(options =>
@@ -121,10 +122,6 @@ app.UseHttpsRedirection();
 app.UseSession();
 
 app.UseCors(MyAllowSpecificOrigins);
-/*app.UseCors(builder => builder
-     .AllowAnyOrigin()
-     .AllowAnyMethod()
-     .AllowAnyHeader());*/
 
 app.UseStaticFiles(new StaticFileOptions
 {

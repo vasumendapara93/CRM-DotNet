@@ -54,11 +54,10 @@ namespace CRM.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Assigner")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AssignerId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BranchId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
@@ -73,9 +72,9 @@ namespace CRM.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DataEnteryOprator")
+                    b.Property<string>("DataEnteryOpratorId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -100,19 +99,15 @@ namespace CRM.Migrations
                     b.Property<string>("NameTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("OrganizationId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SellsPerson")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("SalesPersonId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
@@ -135,11 +130,58 @@ namespace CRM.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssignerId");
+
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("DataEnteryOpratorId");
 
                     b.HasIndex("OrganizationId");
 
+                    b.HasIndex("SalesPersonId");
+
                     b.ToTable("Leads");
+                });
+
+            modelBuilder.Entity("CRM.Models.LeadNote", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LeadId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LeadId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("LeadNotes");
                 });
 
             modelBuilder.Entity("CRM.Models.Role", b =>
@@ -258,21 +300,64 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Models.Lead", b =>
                 {
+                    b.HasOne("CRM.Models.User", "Assigner")
+                        .WithMany()
+                        .HasForeignKey("AssignerId");
+
                     b.HasOne("CRM.Models.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId")
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("CRM.Models.User", "DataEnteryOprator")
+                        .WithMany()
+                        .HasForeignKey("DataEnteryOpratorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRM.Models.User", "User")
+                    b.HasOne("CRM.Models.User", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CRM.Models.User", "SelesPerson")
+                        .WithMany()
+                        .HasForeignKey("SalesPersonId");
+
+                    b.Navigation("Assigner");
+
                     b.Navigation("Branch");
 
-                    b.Navigation("User");
+                    b.Navigation("DataEnteryOprator");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("SelesPerson");
+                });
+
+            modelBuilder.Entity("CRM.Models.LeadNote", b =>
+                {
+                    b.HasOne("CRM.Models.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Lead", "Lead")
+                        .WithMany("Notes")
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Lead");
+
+                    b.Navigation("UpdatedBy");
                 });
 
             modelBuilder.Entity("CRM.Models.User", b =>
@@ -301,6 +386,11 @@ namespace CRM.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CRM.Models.Lead", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

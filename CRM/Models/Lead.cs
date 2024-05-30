@@ -12,19 +12,28 @@ namespace CRM.Models
         public string Id = Guid.NewGuid().ToString();
 
         [Required]
-        public  string DataEnteryOprator { get; set; }
+        public  string DataEnteryOpratorId { get; set; }
+        [ForeignKey("DataEnteryOpratorId")]
+        [ValidateNever]
+        public User? DataEnteryOprator { get; set; }
 
-        public string? Assigner { get; set; }
-        public string? SellsPerson { get; set; }
+        public string? AssignerId { get; set; }
+        [ForeignKey("AssignerId")]
+        [ValidateNever]
+        public User? Assigner { get; set; }
+
+        public string? SalesPersonId{ get; set; }
+        [ForeignKey("SalesPersonId")]
+        [ValidateNever]
+        public User? SelesPerson { get; set; }
 
         [Required]
         public string OrganizationId { get; set; }
         [ForeignKey("OrganizationId")]
         [ValidateNever]
-        public User User { get; set; }
+        public User Organization { get; set; }
 
-        [Required]
-        public  string BranchId { get; set; }
+        public  string? BranchId { get; set; }
         [ForeignKey(nameof(BranchId))]
         [ValidateNever]
         public Branch Branch { get; set; }
@@ -39,8 +48,7 @@ namespace CRM.Models
         public string? Title { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
-        [Required]
-        public  string Phone { get; set; }
+        public  string? Phone { get; set; }
         public string? LeadSource { get; set; }
         [Required]
         public  string Status { get; set; }
@@ -50,7 +58,9 @@ namespace CRM.Models
         public string? ZipCode { get; set; }
         public string? Country {  get; set; }
         public string? Description { get; set; }
-        public string? Notes { get; set; }
+
+        [ValidateNever]
+        public List<LeadNote>? Notes { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

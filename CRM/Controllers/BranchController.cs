@@ -139,6 +139,14 @@ namespace CRM.Controllers
         {
             try
             { 
+                bool isUnique = await _branchRepo.IsUniqueBranch(branchCreateDTO);
+                if (!isUnique)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Branch Code Already Exists");
+                    return BadRequest(_response);
+                }
                 Branch branch = _mapper.Map<Branch>(branchCreateDTO);
                 await _branchRepo.CreateAsync(branch);
                 await _branchRepo.SaveAsync();
@@ -172,7 +180,18 @@ namespace CRM.Controllers
                     return BadRequest(_response);
                 }
 
-                List<Branch> branchList = branchCreateDTOList.Select(branch => _mapper.Map<BranchCreateDTO, Branch>(branch)).ToList();
+                List<BranchCreateDTO> branchCreateDTOToBeCreated = new List<BranchCreateDTO>();
+                foreach (var branchDTO in branchCreateDTOList)
+                {
+                    bool isUnique = await _branchRepo.IsUniqueBranch(branchDTO);
+                    if (isUnique)
+                    {
+                        branchCreateDTOToBeCreated.Add(branchDTO);
+                    }
+
+                }
+
+                List<Branch> branchList = branchCreateDTOToBeCreated.Select(branch => _mapper.Map<BranchCreateDTO, Branch>(branch)).ToList();
                 await _branchRepo.CreateRangeAsync(branchList);
                 await _branchRepo.SaveAsync();
 

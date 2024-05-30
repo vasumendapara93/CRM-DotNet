@@ -18,7 +18,7 @@ namespace CRM.Repository
 
         public async Task<bool> IsUniqueBranch(BranchCreateDTO branchCreateDTO)
         {
-            Branch branch = await _db.Branches.FirstOrDefaultAsync(u => u.BranchName == branchCreateDTO.BranchName);
+            Branch branch = await _db.Branches.FirstOrDefaultAsync(u => u.OrganizationId == branchCreateDTO.OrganizationId && u.BranchCode == branchCreateDTO.BranchCode);
             if (branch == null)
             {
                 return true;

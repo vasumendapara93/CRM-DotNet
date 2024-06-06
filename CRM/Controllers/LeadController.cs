@@ -34,9 +34,45 @@ namespace CRM.Controllers
             _leadNoteRepo = leadNoteRepo;
         }
 
-
         [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator + "," + SD.Role_Assiner + "," + SD.Role_SalesPerson)]
-        [HttpGet("{organizationId}")]
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<APIResponse>> Get([FromQuery] string id )
+        {
+            try
+            {
+                if (id is null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Id Not Provided");
+                    return BadRequest(_response);
+                }
+                var leadFromDB = await _leadRepo.GetAsync(u => u.Id == id, Trecked: false);
+                if (leadFromDB == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Lead Not Found");
+                    return NotFound(_response);
+                }
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Data = leadFromDB;
+            }
+            catch (Exception e)
+            {
+                _response.ErrorMessages.Add(e.Message);
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+
+     [Authorize(Roles = SD.Role_Organization + ", " + SD.Role_DataEntryOperator + "," + SD.Role_Assiner + "," + SD.Role_SalesPerson)]
+        [HttpGet("all/{organizationId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

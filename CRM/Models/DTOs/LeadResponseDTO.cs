@@ -8,19 +8,29 @@ namespace CRM.Models.DTOs
     {
         [Required]
         public string Id { get; set; }
-
         [Required]
-        public string DataEnteryOprator { get; set; }
+        public string DataEnteryOpratorId { get; set; }
+        [ForeignKey("DataEnteryOpratorId")]
+        [ValidateNever]
+        public User? DataEnteryOprator { get; set; }
 
         public string? AssignerId { get; set; }
+        [ForeignKey("AssignerId")]
+        [ValidateNever]
+        public User? Assigner { get; set; }
 
         public string? SalesPersonId { get; set; }
+        [ForeignKey("SalesPersonId")]
+        [ValidateNever]
+        public User? SelesPerson { get; set; }
 
         [Required]
         public string OrganizationId { get; set; }
+        [ForeignKey("OrganizationId")]
+        [ValidateNever]
+        public User Organization { get; set; }
 
-        [Required]
-        public string BranchId { get; set; }
+        public string? BranchId { get; set; }
         [ForeignKey(nameof(BranchId))]
         [ValidateNever]
         public Branch Branch { get; set; }

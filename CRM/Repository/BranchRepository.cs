@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CRM.Models;
 using CRM.Models.DTOs;
+using CRM.Models.Tables;
 using CRM.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +16,7 @@ namespace CRM.Repository
             _mapper = mapper;
         }
 
-        public async Task<bool> IsUniqueBranch(BranchCreateDTO branchCreateDTO)
+       /* public async Task<bool> IsUniqueBranch(BranchCreateDTO branchCreateDTO)
         {
             Branch branch = await _db.Branches.FirstOrDefaultAsync(u => u.OrganizationId == branchCreateDTO.OrganizationId && u.BranchCode == branchCreateDTO.BranchCode);
             if (branch == null)
@@ -24,7 +24,7 @@ namespace CRM.Repository
                 return true;
             }
             return false;
-        }
+        }*/
 
         public async Task UpdateAsync(BranchUpdateDTO branchUpdateDTO)
         {

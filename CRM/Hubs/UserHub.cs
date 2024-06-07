@@ -1,4 +1,4 @@
-﻿using CRM.Models;
+﻿using CRM.Models.Tables;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CRM.Hubs

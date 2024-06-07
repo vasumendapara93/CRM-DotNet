@@ -1,7 +1,7 @@
 ﻿
 using AutoMapper;
-using CRM.Models;
 using CRM.Models.DTOs;
+using CRM.Models.Tables;
 
 namespace CRM
 {

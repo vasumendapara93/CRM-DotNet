@@ -1,4 +1,4 @@
-﻿using CRM.Models;
+﻿using CRM.Models.Tables;
 using CRM.Repository.IRepository;
 
 namespace CRM.Repository

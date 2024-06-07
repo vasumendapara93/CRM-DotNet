@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using CRM.StaticData.ModelFileds;
+using CRM.Models.Tables;
 
 namespace CRM.Models.DTOs
 {
@@ -30,7 +31,7 @@ namespace CRM.Models.DTOs
         public string? Phone { get; set; }
         public string? LeadSource { get; set; }
         [Required]
-        public string Status { get; set; } = LeadStatus.NotContacted;
+        public string Status { get; set; } = StaticData.ModelFileds.LeadStatus.NotContacted;
         public string? Street { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }

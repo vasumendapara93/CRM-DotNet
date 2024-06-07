@@ -1,5 +1,7 @@
 ﻿using CRM.Models;
+using CRM.Models.Tables;
 using CRM.StaticData;
+using CRM.StaticData.Role;
 using Microsoft.EntityFrameworkCore;
 namespace CRM.DbInitialize
 {
@@ -28,20 +30,21 @@ namespace CRM.DbInitialize
             //Create role and master user of not exist
             Role defaultRole = new()
             {
-                RoleName = SD.Role_MasterUser
+                RoleName = UserRoles.Admin
             };
-            if (_db.Roles.Count() == 0) {
+            if (_db.Roles.Count() == 0)
+            {
 
                 _db.Roles.Add(defaultRole);
-                _db.Roles.Add(new Role { RoleName = SD.Role_Organization });
-                _db.Roles.Add(new Role { RoleName = SD.Role_DataEntryOperator });
-                _db.Roles.Add(new Role { RoleName = SD.Role_Assiner });
-                _db.Roles.Add(new Role { RoleName = SD.Role_SalesPerson });
+                _db.Roles.Add(new Role { RoleName = UserRoles.Company });
+                _db.Roles.Add(new Role { RoleName = UserRoles.DataEntryOperator });
+                _db.Roles.Add(new Role { RoleName = UserRoles.Assiner });
+                _db.Roles.Add(new Role { RoleName = UserRoles.SalesPerson });
 
             }
             else
             {
-                defaultRole = _db.Roles.FirstOrDefault(u => u.RoleName == SD.Role_MasterUser);
+                defaultRole = _db.Roles.FirstOrDefault(u => u.RoleName == UserRoles.Admin);
             }
 
             if (_db.Users.Count() == 0)
@@ -55,11 +58,10 @@ namespace CRM.DbInitialize
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("Master User", BCrypt.Net.HashType.SHA256),
                     RoleId = defaultRole.Id,
                     CreateDate = DateTime.Now,
-                    IsAccountActivated = true,
-                    IsActive = true,
-                    Gender = Gender.NotToSay
+                    IsAccountActivated = true
                 });
             }
+            
             _db.SaveChanges();
 
         }

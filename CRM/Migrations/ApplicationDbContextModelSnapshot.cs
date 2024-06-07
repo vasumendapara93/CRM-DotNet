@@ -22,10 +22,47 @@ namespace CRM.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CRM.Models.Branch", b =>
+            modelBuilder.Entity("CRM.Models.Tables.ActivityStatus", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityStatuses");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Branch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BranchCode")
                         .HasColumnType("nvarchar(max)");
@@ -34,10 +71,75 @@ namespace CRM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrganizationId")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Branches");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.CallResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -46,40 +148,239 @@ namespace CRM.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Branches");
+                    b.ToTable("CallResults");
                 });
 
-            modelBuilder.Entity("CRM.Models.Lead", b =>
+            modelBuilder.Entity("CRM.Models.Tables.CallStatus", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("AssignerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("BranchId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DataEnteryOpratorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CallStatuses");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactPerson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubscriptionEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SubscriptionStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("StateId");
+
+                    b.HasIndex("SubscriptionTypeId");
+
+                    b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.DiscountSchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Discount")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("DiscountSchedules");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -87,45 +388,168 @@ namespace CRM.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LeadSource")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrganizationId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SalesPersonId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("MiddleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Lead", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AssignerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Fax")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LeadCompany")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SalesPersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Skypeld")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Website")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -134,34 +558,130 @@ namespace CRM.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("DataEnteryOpratorId");
+                    b.HasIndex("CityId");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("SalesPersonId");
+
+                    b.HasIndex("StateId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Leads");
                 });
 
-            modelBuilder.Entity("CRM.Models.LeadNote", b =>
+            modelBuilder.Entity("CRM.Models.Tables.LeadCall", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActivityStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Agenda")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CallFromId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CallResult")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LeadId")
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<int>("LeadId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Purpose")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedById")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityStatusId");
+
+                    b.HasIndex("CallFromId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LeadId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("LeadCalls");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.LeadMeeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeadId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -170,8 +690,45 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                    b.HasKey("Id");
+
+                    b.HasIndex("HostId");
+
+                    b.HasIndex("LeadId");
+
+                    b.ToTable("LeadMeetings");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.LeadNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LeadId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedById")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -184,33 +741,133 @@ namespace CRM.Migrations
                     b.ToTable("LeadNotes");
                 });
 
-            modelBuilder.Entity("CRM.Models.Role", b =>
+            modelBuilder.Entity("CRM.Models.Tables.LeadStatus", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("RoleName")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("LeadStatuses");
                 });
 
-            modelBuilder.Entity("CRM.Models.User", b =>
+            modelBuilder.Entity("CRM.Models.Tables.LeadTask", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("Address")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignedTold")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BranchId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ContactPerson")
+                    b.Property<int>("LeadId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PriorityStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedById")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedTold");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LeadId");
+
+                    b.HasIndex("PriorityStatusId");
+
+                    b.HasIndex("TaskStatusId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("LeadTasks");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.LeadTaskStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeadTaskStatuses");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.MeetingParticipent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -219,32 +876,291 @@ namespace CRM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ParticipentId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsAccountActivated")
-                        .HasColumnType("bit");
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("ParticipentId");
+
+                    b.ToTable("MeetingParticipents");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.PriorityStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("JoiningDate")
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PriorityStatuses");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Reminder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CallId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeadId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LeadTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipentRemindBefore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReminderBefore")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReminderTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedById")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CallId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LeadId");
+
+                    b.HasIndex("LeadTaskId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("Reminders");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.RoleTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rolename")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleTables");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrganizationId")
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("States");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.SubscriptionFeature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BranchCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmployeeCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MailPerDay")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionFeatures");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.SubscriptionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<int>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("SubscriptionTypes");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAccountActivated")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RefreshToken")
@@ -253,32 +1169,26 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("SubscriptionEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("SubscriptionStartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId");
-
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CRM.Models.UserActivationToken", b =>
+            modelBuilder.Entity("CRM.Models.Tables.UserActivationToken", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ActivationToken")
                         .IsRequired()
@@ -287,9 +1197,8 @@ namespace CRM.Migrations
                     b.Property<DateTime>("ActivationTokenExpiryTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -298,60 +1207,321 @@ namespace CRM.Migrations
                     b.ToTable("UserActivationTokens");
                 });
 
-            modelBuilder.Entity("CRM.Models.Lead", b =>
+            modelBuilder.Entity("CRM.Models.Tables.Branch", b =>
                 {
-                    b.HasOne("CRM.Models.User", "Assigner")
+                    b.HasOne("CRM.Models.Tables.City", "City")
                         .WithMany()
-                        .HasForeignKey("AssignerId");
-
-                    b.HasOne("CRM.Models.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId");
-
-                    b.HasOne("CRM.Models.User", "DataEnteryOprator")
-                        .WithMany()
-                        .HasForeignKey("DataEnteryOpratorId")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRM.Models.User", "Organization")
+                    b.HasOne("CRM.Models.Tables.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRM.Models.User", "SelesPerson")
+                    b.HasOne("CRM.Models.Tables.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("SalesPersonId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Assigner");
+                    b.HasOne("CRM.Models.Tables.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("State");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.City", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("State");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Company", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.SubscriptionType", "SubscriptionType")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("State");
+
+                    b.Navigation("SubscriptionType");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.DiscountSchedule", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.SubscriptionType", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subscription");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Employee", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Branch");
 
-                    b.Navigation("DataEnteryOprator");
+                    b.Navigation("City");
 
-                    b.Navigation("Organization");
+                    b.Navigation("Company");
 
-                    b.Navigation("SelesPerson");
+                    b.Navigation("Country");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("State");
                 });
 
-            modelBuilder.Entity("CRM.Models.LeadNote", b =>
+            modelBuilder.Entity("CRM.Models.Tables.Lead", b =>
                 {
-                    b.HasOne("CRM.Models.User", "CreatedBy")
+                    b.HasOne("CRM.Models.Tables.User", "Assigner")
+                        .WithMany()
+                        .HasForeignKey("AssignerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRM.Models.Lead", "Lead")
-                        .WithMany("Notes")
+                    b.HasOne("CRM.Models.Tables.User", "SelesPerson")
+                        .WithMany()
+                        .HasForeignKey("SalesPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.LeadStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assigner");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("City");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("SelesPerson");
+
+                    b.Navigation("State");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.LeadCall", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.ActivityStatus", "ActivityStatus")
+                        .WithMany()
+                        .HasForeignKey("ActivityStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "CallFrom")
+                        .WithMany()
+                        .HasForeignKey("CallFromId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Lead", "Lead")
+                        .WithMany()
                         .HasForeignKey("LeadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRM.Models.User", "UpdatedBy")
+                    b.HasOne("CRM.Models.Tables.LeadStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("UpdatedById");
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ActivityStatus");
+
+                    b.Navigation("CallFrom");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Lead");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.LeadMeeting", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.Employee", "Host")
+                        .WithMany()
+                        .HasForeignKey("HostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Lead", "Lead")
+                        .WithMany()
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Host");
+
+                    b.Navigation("Lead");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.LeadNote", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Lead", "Lead")
+                        .WithMany()
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
 
@@ -360,37 +1530,159 @@ namespace CRM.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("CRM.Models.User", b =>
+            modelBuilder.Entity("CRM.Models.Tables.LeadTask", b =>
                 {
-                    b.HasOne("CRM.Models.Branch", "Branch")
+                    b.HasOne("CRM.Models.Tables.Employee", "AssignedTo")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("AssignedTold")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("CRM.Models.Role", "Role")
+                    b.HasOne("CRM.Models.Tables.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.Lead", "Lead")
+                        .WithMany()
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.PriorityStatus", "PriorityStatus")
+                        .WithMany()
+                        .HasForeignKey("PriorityStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.LeadTaskStatus", "TaskStatus")
+                        .WithMany()
+                        .HasForeignKey("TaskStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssignedTo");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Lead");
+
+                    b.Navigation("PriorityStatus");
+
+                    b.Navigation("TaskStatus");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.MeetingParticipent", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.LeadMeeting", "Meeting")
+                        .WithMany()
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.User", "Participent")
+                        .WithMany()
+                        .HasForeignKey("ParticipentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("Participent");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.Reminder", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.LeadCall", "Call")
+                        .WithMany()
+                        .HasForeignKey("CallId");
+
+                    b.HasOne("CRM.Models.Tables.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("CRM.Models.Tables.Lead", "Lead")
+                        .WithMany()
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Models.Tables.LeadTask", "LeadTask")
+                        .WithMany()
+                        .HasForeignKey("LeadTaskId");
+
+                    b.HasOne("CRM.Models.Tables.LeadMeeting", "Meeting")
+                        .WithMany()
+                        .HasForeignKey("MeetingId");
+
+                    b.HasOne("CRM.Models.Tables.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("Call");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Lead");
+
+                    b.Navigation("LeadTask");
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.State", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.SubscriptionType", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.SubscriptionFeature", "Feature")
+                        .WithMany()
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Feature");
+                });
+
+            modelBuilder.Entity("CRM.Models.Tables.User", b =>
+                {
+                    b.HasOne("CRM.Models.Tables.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Branch");
-
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("CRM.Models.UserActivationToken", b =>
+            modelBuilder.Entity("CRM.Models.Tables.UserActivationToken", b =>
                 {
-                    b.HasOne("CRM.Models.User", "User")
+                    b.HasOne("CRM.Models.Tables.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CRM.Models.Lead", b =>
-                {
-                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

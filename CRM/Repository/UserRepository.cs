@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CRM.Models;
 using CRM.Models.DTOs;
+using CRM.Models.Tables;
 using CRM.Repository.IRepository;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;

@@ -20,7 +20,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"))
     );
 
+builder.Services.AddScoped<IActivityStatusRepository, ActivityStatusRepository>();
+builder.Services.AddScoped<ICallResultRepository, CallResultRepository>();
+builder.Services.AddScoped<ICallStatusRepository, CallStatusRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IDbinitializer, DBInitializer>();
+builder.Services.AddScoped<IDiscountScheduleRepository, DiscountScheduleRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
@@ -29,6 +37,18 @@ builder.Services.AddScoped<IOTPRepository, OTPRepository>();
 builder.Services.AddScoped<IMailServiceRepository, MailServiceRepository>();
 builder.Services.AddScoped<IUserActivationTokenRepository, UserActivationTokenRepository>();
 builder.Services.AddScoped<ILeadNoteRepository, LeadNoteRepository>();
+builder.Services.AddScoped<ILeadCallRepository, LeadCallRepository>();
+builder.Services.AddScoped<ILeadMeetingRepository, LeadMeetingRepository>();
+builder.Services.AddScoped<ILeadStatusRepository, LeadStatusRepository>();
+builder.Services.AddScoped<ILeadTaskRepository, LeadTaskRepository>();
+builder.Services.AddScoped<ILeadTaskStatusRepository, LeadTaskStatusRepository>();
+builder.Services.AddScoped<IMeetingParticipentRepository, MeetingParticipentRepository>();
+builder.Services.AddScoped<IPriorityStatusRepository, PriorityStatusRepository>();
+builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IStateRepository, StateRepository>();
+builder.Services.AddScoped<ISubscriptionTypeRepository, SubscriptionTypeRepository>();
+builder.Services.AddScoped<ISubscriptionFeatureRepository, SubscriptionFeatureRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 /*builder.Services.AddResponseCompression(options =>

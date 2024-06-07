@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using CRM.Models.Tables;
 
 namespace CRM.Models.DTOs
 {
